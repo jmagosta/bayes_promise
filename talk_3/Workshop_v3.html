@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Robert Horton Joseph Rickert">
+<meta name="dcterms.date" content="2025-04-07">
+
+<title>DA Workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Workshop_v3_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Workshop_v3_files/libs/quarto-html/quarto.js"></script>
+<script src="Workshop_v3_files/libs/quarto-html/popper.min.js"></script>
+<script src="Workshop_v3_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Workshop_v3_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Workshop_v3_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Workshop_v3_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Workshop_v3_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Workshop_v3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Workshop_v3_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#health-technology-assessment" id="toc-health-technology-assessment" class="nav-link active" data-scroll-target="#health-technology-assessment">Health Technology Assessment</a></li>
+  <li><a href="#this-workshop" id="toc-this-workshop" class="nav-link" data-scroll-target="#this-workshop">This Workshop</a></li>
+  <li><a href="#some-preliminaries" id="toc-some-preliminaries" class="nav-link" data-scroll-target="#some-preliminaries">Some Preliminaries</a>
+  <ul class="collapse">
+  <li><a href="#bayesian-modeling" id="toc-bayesian-modeling" class="nav-link" data-scroll-target="#bayesian-modeling">Bayesian Modeling</a></li>
+  <li><a href="#markov-chains" id="toc-markov-chains" class="nav-link" data-scroll-target="#markov-chains">Markov Chains</a></li>
+  <li><a href="#markov-chain-monte-carlo-mcmc" id="toc-markov-chain-monte-carlo-mcmc" class="nav-link" data-scroll-target="#markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</a>
+  <ul class="collapse">
+  <li><a href="#mcmc-software" id="toc-mcmc-software" class="nav-link" data-scroll-target="#mcmc-software">MCMC Software</a></li>
+  <li><a href="#a-very-simple-gibbs-sampler" id="toc-a-very-simple-gibbs-sampler" class="nav-link" data-scroll-target="#a-very-simple-gibbs-sampler">A very Simple Gibbs Sampler</a></li>
+  </ul></li>
+  <li><a href="#setup-r-libraries" id="toc-setup-r-libraries" class="nav-link" data-scroll-target="#setup-r-libraries">Setup R Libraries</a></li>
+  <li><a href="#our-environment" id="toc-our-environment" class="nav-link" data-scroll-target="#our-environment">Our Environment</a></li>
+  <li><a href="#the-problem" id="toc-the-problem" class="nav-link" data-scroll-target="#the-problem">The Problem</a></li>
+  </ul></li>
+  <li><a href="#deterministic-decision-analysis" id="toc-deterministic-decision-analysis" class="nav-link" data-scroll-target="#deterministic-decision-analysis">Deterministic Decision Analysis</a>
+  <ul class="collapse">
+  <li><a href="#the-clinical-data" id="toc-the-clinical-data" class="nav-link" data-scroll-target="#the-clinical-data">The Clinical Data</a></li>
+  <li><a href="#resource-use-and-cost-data" id="toc-resource-use-and-cost-data" class="nav-link" data-scroll-target="#resource-use-and-cost-data">Resource Use and Cost Data</a></li>
+  </ul></li>
+  <li><a href="#stochastic-decision-analysis" id="toc-stochastic-decision-analysis" class="nav-link" data-scroll-target="#stochastic-decision-analysis">Stochastic Decision Analysis</a></li>
+  <li><a href="#model-with-distributions" id="toc-model-with-distributions" class="nav-link" data-scroll-target="#model-with-distributions">Model with Distributions</a>
+  <ul class="collapse">
+  <li><a href="#distribution-of-lnrelative-risk" id="toc-distribution-of-lnrelative-risk" class="nav-link" data-scroll-target="#distribution-of-lnrelative-risk">Distribution of ln(Relative Risk):</a></li>
+  <li><a href="#distribution-of-probinfection-no-antibiotic" id="toc-distribution-of-probinfection-no-antibiotic" class="nav-link" data-scroll-target="#distribution-of-probinfection-no-antibiotic">Distribution of Prob[infection | no antibiotic]</a></li>
+  <li><a href="#code-for-the-stochastic-model" id="toc-code-for-the-stochastic-model" class="nav-link" data-scroll-target="#code-for-the-stochastic-model">Code for the Stochastic Model</a></li>
+  <li><a href="#data-for-the-stochastic-model" id="toc-data-for-the-stochastic-model" class="nav-link" data-scroll-target="#data-for-the-stochastic-model">Data for the Stochastic Model</a></li>
+  <li><a href="#code-to-run-the-stochastic-model" id="toc-code-to-run-the-stochastic-model" class="nav-link" data-scroll-target="#code-to-run-the-stochastic-model">Code to Run the Stochastic Model</a></li>
+  <li><a href="#model-results" id="toc-model-results" class="nav-link" data-scroll-target="#model-results">Model Results</a></li>
+  <li><a href="#diagnostic-plots" id="toc-diagnostic-plots" class="nav-link" data-scroll-target="#diagnostic-plots">Diagnostic Plots</a></li>
+  <li><a href="#prior-distributions" id="toc-prior-distributions" class="nav-link" data-scroll-target="#prior-distributions">Prior Distributions</a></li>
+  <li><a href="#posterior-distributions" id="toc-posterior-distributions" class="nav-link" data-scroll-target="#posterior-distributions">Posterior Distributions</a></li>
+  </ul></li>
+  <li><a href="#the-economic-evaluation-of-the-stochastic-model" id="toc-the-economic-evaluation-of-the-stochastic-model" class="nav-link" data-scroll-target="#the-economic-evaluation-of-the-stochastic-model">The Economic Evaluation of the Stochastic Model</a>
+  <ul class="collapse">
+  <li><a href="#run-the-economic-model" id="toc-run-the-economic-model" class="nav-link" data-scroll-target="#run-the-economic-model">Run the Economic Model</a></li>
+  <li><a href="#the-economic-decision" id="toc-the-economic-decision" class="nav-link" data-scroll-target="#the-economic-decision">The Economic Decision</a>
+  <ul class="collapse">
+  <li><a href="#cost-effectiveness" id="toc-cost-effectiveness" class="nav-link" data-scroll-target="#cost-effectiveness">Cost-Effectiveness</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#the-meta-analysis" id="toc-the-meta-analysis" class="nav-link" data-scroll-target="#the-meta-analysis">The Meta-Analysis</a>
+  <ul class="collapse">
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#results-from-the-meta-analysis" id="toc-results-from-the-meta-analysis" class="nav-link" data-scroll-target="#results-from-the-meta-analysis">Results from the Meta-Analysis</a></li>
+  <li><a href="#correlation-scatterplot-ce-plane-diff.qalys-vs-diff.cost" id="toc-correlation-scatterplot-ce-plane-diff.qalys-vs-diff.cost" class="nav-link" data-scroll-target="#correlation-scatterplot-ce-plane-diff.qalys-vs-diff.cost">Correlation Scatterplot (CE plane): diff.QALYs vs diff.cost</a></li>
+  </ul></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks">Closing Remarks</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DA Workshop</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Robert Horton Joseph Rickert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="health-technology-assessment" class="level1">
+<h1>Health Technology Assessment</h1>
+<p>In the U.K, Canada, the countries of the European Union and other countries with managed healthcare systems, the decision to make a new drug or other medical treatment available to patients in the healthcare system is based on an assessment of the cost-effectiveness of treatment with respect to the prevailing standard of care. This is typically accomplished via a three phase process the includes the submission of a dossier to the relevant health authority that contains a statistical meta-analysis of all relevant clinical data and economic evaluation of the utility of the new treatment to the healthcare system.</p>
+<p><img src="hta.png" class="img-fluid" alt=""> <a href="https://toolbox.eupati.eu/resources/health-technology-assessment-process-fundamentals/">source</a></p>
+<p>Cost effectiveness is typically presented as a Cost-Utility analysis, conducted from a systems perspective that measures utility of medical effects in Quality Adjusted Life Years using ICERs <em>(Incremental Cost Effectiveness Ratio) = (Additional Costs) / (Additional Benefits)</em>.</p>
+<p>The final decision often comes down to examining the equation: Net Benefit = Uλ - C where:</p>
+<ul>
+<li>U = Lifetime utility of intervention (usually measured in QALYS)</li>
+<li>λ = money value attributed to a unit of health gain: i.e.&nbsp;the exchange rate</li>
+<li>C = lifetime cost</li>
+</ul>
+</section>
+<section id="this-workshop" class="level1">
+<h1>This Workshop</h1>
+<p>We believe that a HTA style analysis provides a paradigm for decision making applicable to many complex decisions beyond healthcare. The goal of this workshop is to work through a textbook example of an HTA style cost-utility analysis that informs a typical decision made made by healthcare authorities. We will show how all available clinical data and relevant economic data can be combined in a single model which simulates the joint distribution of the model parameters and allows inferences to be made that take account the uncertainties introduced by the underlying assumptions. Along the way we will introduce the R language for statistical computing, the MCMC algorithm that enables fitting complex Bayesian models and point out the benefits of working in a way that facilitates <a href="https://en.wikipedia.org/wiki/Reproducibility#:~:text=The%20term%20reproducible%20research%20refers,calculate%20the%20results%20easily%20accessible.">reproducible research</a> and <a href="https://en.wikipedia.org/wiki/Literate_programming">literate programming</a>. Note that the content of this course is based on the textbook: <em>Evidence Synthesis for Decision making in Healthcare</em> by <a href="https://bcs.wiley.com/he-bcs/Books?action=index&amp;bcsId=7268&amp;itemId=047006109X">Welton et al.&nbsp;(2012)</a> which in spite of the passing years, remains an excellent text for conveying the essentials of statistical modeling for health economic decisions. References to “the text” refer to this textbook unless otherwise stated.</p>
+</section>
+<section id="some-preliminaries" class="level1">
+<h1>Some Preliminaries</h1>
+<section id="bayesian-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-modeling">Bayesian Modeling</h2>
+<p>Suppose you have a random variable Y that describes the outcome of some experiment and that the distribution of Y depends on some parameter <span class="math inline">\(\theta \in \mathbb{R}\)</span>. You would like to know the probability of observing the data, y. You can determine the probability of Y given that the parameter in your experiment was set to <span class="math inline">\(\theta\)</span> by integrating over the joint distribution of both variables, <span class="math inline">\(P(Y,\theta)\)</span>.</p>
+<p><span class="math display">\[ P(y) = \int_{\mathbb{R}} P(y,\theta) d\theta \]</span> Joint distributions are usually extremely difficult to determine, so in practice people work with the prior distribution of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\pi(\theta)\)</span> and the conditional distribution of Y given <span class="math inline">\(\theta\)</span>, <span class="math inline">\(P(Y | \theta)\)</span>. The above equaation then becomes:</p>
+<p><span class="math display">\[ P(y) = \int_{\mathbb{R}} \pi(\theta) P(y | \theta)d\theta \]</span></p>
+<p><span class="math inline">\(\pi(\theta)\)</span> is the <em>prior</em> distribution for determined from all of the available information about before any data is collected. P(y) is the prior predictive distribution for Y.</p>
+<p>Once data has been collected, Bayes Theorem allows the <em>posterior</em> distribution of <span class="math inline">\(\theta\)</span> to be determined as:</p>
+<p><span class="math display">\[ \pi(\theta|y) = \frac{\pi(\theta)P(y|\theta)}{P(y)}\]</span></p>
+<p>From here, a posterior distribution for Y can be computed by sampling from the distribution and <span class="math inline">\(\pi(theta|y)\)</span>. Note however, that in practice in all but the simplest situations it is extremely difficult to compute the integral P(y). For this reason, Bayesian inference did not become common until the 1990’s when computers powerful enough to take advantage of advanced numerical techniques such as <em>Markov Chain Monte Carlo (MCMC)</em> and <em>Gibbs Sampling</em> became available.</p>
+</section>
+<section id="markov-chains" class="level2">
+<h2 class="anchored" data-anchor-id="markov-chains">Markov Chains</h2>
+<p>A Markov Chain is a sequence of random variables <span class="math inline">\(X_1, X_2, . . . X_n\)</span> that take values in some state space such that the state at time n, <span class="math inline">\(X_{n+1}\)</span>, given <span class="math inline">\(X_n\)</span> and all previous values of the chain depends only on the value of <span class="math inline">\(X_n\)</span>. In other words, the future state of the chain depends only on its current state and not on its past history. This property is called the <em>Markov Property</em>. A simple example of a Markov chain is a random walk where where at each position a particle moves up or down from wherever it is according to some random draw. The following gif illustrates a particle that randomly moves up or down according to a draw from a standard normal distribution.</p>
+<p><img src="random_walk.gif" class="img-fluid" alt=""></p>
+<p>The probabilities of the chain moving from one state to another are determined by a matrix P of <em>transition probabilities</em> . The position of the chain in its state space at time n is determined by <span class="math inline">\(\Pi_n = P^n \Pi_0\)</span> where <span class="math inline">\(\Pi_0\)</span> is the initial state of the chain. A Markov chain that meets certain conditions will converge to a stationary distribution as n approaches infinity. Convergence is independent of the initial state of the chain.</p>
+</section>
+<section id="markov-chain-monte-carlo-mcmc" class="level2">
+<h2 class="anchored" data-anchor-id="markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</h2>
+<p>Markov Chain Monte Carlo refers to a family of algorithms for obtaining numerical approximations to probability distributions represented by multi-parameter integrals. The idea is to construct a Markov Chain that will converge to the target distribution. MCMC originated with the work of John von Neumann, Stanislaw Ulm and others at Los Alamos during the Second World War, and was introduced to the statistical community in a series of papers including <a href="https://bayes.wustl.edu/Manual/EquationOfState.pdf">Metropolis et al.&nbsp;(1953)</a> and <a href="https://www2.stat.duke.edu/~sschmid/Courses/Stat376/Papers/Basic/Hastings1970.pdf">Hastings (1970)</a>. <a href="https://www.dam.brown.edu/people/documents/stochasticrelaxation.pdf">German &amp; German (1984)</a> extended this work to introduce the <em>Gibbs Sampler</em> which is a special case of the <em>Metropolis-Hastings</em> Algorithm. We will use the Gibbs Sampler in the work below.</p>
+<section id="mcmc-software" class="level3">
+<h3 class="anchored" data-anchor-id="mcmc-software">MCMC Software</h3>
+<p>Although there are multiple <code>MCMC</code> engines available to power <code>R</code> based Bayesian Models, we have chosen to run <code>JAGS</code> (Just Another Gibbs Sampler) via the <code>rjags</code> interface for the following reasons:</p>
+<ul>
+<li><code>JAGS</code> is a free, open-source software package that is widely used in the Bayesian community.</li>
+<li><code>JAGS</code> runs the <code>BUGS</code> language for specifying Bayesian models and was the obvious choice for a first attempt to transfer the original code supplied in the supplementary material to the text from the now obsolete<code>WinBugs</code>program to a modern <code>MCMC</code> engine.</li>
+</ul>
+<p>The <code>JAGS</code> program is available from <a href="http://mcmc-jags.sourceforge.net/" class="uri">http://mcmc-jags.sourceforge.net/</a>, and the <code>rjags</code> package is available from <a href="https://cran.r-project.org/web/packages/rjags/index.html" class="uri">https://cran.r-project.org/web/packages/rjags/index.html</a>.</p>
+<p>Other MCMC Engines compatible with R include:</p>
+<ul>
+<li><a href="https://mc-stan.org/"><code>Stan</code></a> is a probabilistic programming language that leverages <a href="https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo">Hamiltonian Monte Carlo</a> (H (specifically its No-U-Turn Sampler (NUTS)) for efficient Bayesian inference, offering advantages like faster convergence, reduced tuning burden, and a more intuitive modeling process. <code>Stan</code> is the production-level <code>MCMC</code> engine.</li>
+<li><a href="https://cran.r-project.org/package=nimble"><code>nimble</code></a> is a system for writing hierarchical statistical models that is similar to <code>Stan</code> but is designed to be more flexible and extensible. It is a good choice for users who wnat to write custom models using the <code>R</code> syntax. See <a href="https://rviews.rstudio.com/2018/07/05/a-first-look-at-nimble/"><em>A First Look at NIMBLE</em></a>,</li>
+<li><a href="https://cran.r-project.org/web/packages/greta/index.html">greta</a> is an <code>MCMC</code> sampler based on <code>tensorflow</code>. Look <a href="https://greta-stats.org/reference/samplers">here</a> for more information.</li>
+</ul>
+</section>
+<section id="a-very-simple-gibbs-sampler" class="level3">
+<h3 class="anchored" data-anchor-id="a-very-simple-gibbs-sampler">A very Simple Gibbs Sampler</h3>
+<p>The following example comes from <a href="https://www.wiley.com/en-us/Introduction+to+Stochastic+Processes+with+R-p-9781118740705">Dobrow (2016)</a>. In the Gibbs Sampler, the target distribution is often an m dimensional joint density function: <span class="math inline">\(\pi(x) = \pi(x_1, x_2, . . . x_m)\)</span>. The algorithm generates elements of the form: <span class="math inline">\((X_1^0, . . . X_m^0), (X_1^1, . . . X_m^1), (X_1^2, . . . X_m^2) . . .\)</span> by iteratively updating each component of the m-dimensional vector contidional on the other m-1 components. Consider the simple example of generating a bivariate, standard normal distribution with correlation <span class="math inline">\(\rho\)</span>. If the random variable X = (x,y) is bivariate normal then <span class="math inline">\(P(X | Y = y) \sim N(\rho y, \sqrt(1 - \rho^2))\)</span> and <span class="math inline">\(P(Y | X = x) \sim N(\rho x, \sqrt(1 - \rho^2))\)</span> A Gibbs Sampler algorithm for this is:</p>
+<ol type="1">
+<li>Initialize: <span class="math inline">\((x_0,y_0) = (0,0)\)</span> and <span class="math inline">\(m = 1\)</span></li>
+<li>Generate <span class="math inline">\(x_m\)</span> from <span class="math inline">\(X | Y = y_{m-1}\)</span> by simulating from <span class="math inline">\(N(\rho y_{m-1}, \sqrt(1 - \rho^2))\)</span></li>
+<li>Generate <span class="math inline">\(y_m\)</span> from <span class="math inline">\(Y | X = x_m\)</span> by simulating from. <span class="math inline">\(N(\rho x_m), \sqrt(1 - \rho^2))\)</span></li>
+<li><span class="math inline">\(m = m + 1\)</span></li>
+<li>Return to step 2</li>
+</ol>
+</section>
+</section>
+<section id="setup-r-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="setup-r-libraries">Setup R Libraries</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rjags, <span class="at">verbose =</span> <span class="cn">FALSE</span>)      <span class="co"># coda.samples</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jagsUI, <span class="at">verbose=</span><span class="cn">FALSE</span>)     <span class="co"># wrapper for rjags</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mcmcplots)  <span class="co"># caterplot</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This code implements a Gibbs Sampler construct to a Bivariate Normal distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.60</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trials <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sdev <span class="ot">&lt;-</span> <span class="fu">sqrt</span>( <span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>simlist <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>trials), <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>trials){</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  simlist[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>,rho<span class="sc">*</span>simlist[i<span class="dv">-1</span>,<span class="dv">2</span>], sdev)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  simlist[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>,rho<span class="sc">*</span>simlist[i,<span class="dv">1</span>], sdev)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(simlist[,<span class="dv">1</span>],simlist[,<span class="dv">2</span>])</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span><span class="fu">ggplot</span>(<span class="fu">aes</span>(x,y)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Simulated Bivariate Normal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="our-environment" class="level2">
+<h2 class="anchored" data-anchor-id="our-environment">Our Environment</h2>
+<ul>
+<li>What you are looking out now: An HTML webpage rendered by <a href="https://quarto.org/">Quarto</a> an application that renders complicate documents in several formats and includes the ability to execute <a href="https://www.r-project.org/">R</a> and Python code</li>
+<li>The RStudio IDE (Integrated Development Environment) for working with R and Quarto</li>
+<li><a href="https://github.com/about">GitHub</a>: a facility that hosts repositories that a managed by the <a href="https://git-scm.com/">Git</a> version control software.</li>
+</ul>
+</section>
+<section id="the-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem">The Problem</h2>
+<p>In this workshop we will explore the health economics decision as to whether it is of benefit to the healthcare system to adopt the practice of prophylactically administering an antibiotic to women who are about to give birth by means of Cesarean sections. In this procedure, there is always some risk that a woman will develop an infection during the procedure which will endanger her health, the health of her baby and place a financial burden on the healthcare system. There are several questions that might occur to you. Is the antibiotic effective when administered prophylacticlly? Do infections happen often enough to make it a standard procedure? How many women must become infected before the costs of the extra care require to fight the infection exceed the costs of administering the antibiotic? How much can the health care system spend on each dose of the antibiotic.</p>
+<p>The following figure depicts a simplified version ot the decision tree.</p>
+<p><img src="decision_tree.png" class="img-fluid" alt="The decision tree."></p>
+<p>In the remainder of this workshop, we will formulate a version of the typical health technology assessment analysis to support decision makers. The full model will comprise a Bayesian meta-analysis that synthesizes the relevant medical evidence from several clinical studies as well as estimates of the required costs, and outcome probabilities. We won’t jump right in to the full model. Rather we will start with a deterministic version of the decision problem based on a single clinical study and then work our way up from there.</p>
+</section>
+</section>
+<section id="deterministic-decision-analysis" class="level1">
+<h1>Deterministic Decision Analysis</h1>
+<p>In this section we will present a deterministic model of the problem that can be described by means of the following directed graph.</p>
+<p><img src="deterministic.png" class="img-fluid" alt="Deterministic DAG."></p>
+<p><span class="math display">\[ Relative Risk = \frac{a/(a+b)}{c/(c+d)}\]</span></p>
+<p>The deterministic model presented in this section may be found on page 56 in section 3.4 of the text.</p>
+<section id="the-clinical-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-clinical-data">The Clinical Data</h2>
+<p>The data for our first model comes from a study by <a href="https://pubmed.ncbi.nlm.nih.gov/8051377/">Bibi et al., 1994</a> to test the effectiveness of prophylacticly using antibiotics to reduce infection in women delivering by cesarean section/</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>effectiveness_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">Description =</span> <span class="fu">c</span>(<span class="st">"Prophylactic antibiotics"</span>, <span class="st">"Placebo"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Infection =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">28</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">No_infection =</span> <span class="fu">c</span>(<span class="dv">129</span>, <span class="dv">108</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">c</span>(<span class="st">"Treatment"</span>, <span class="st">"Control"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Total =</span> Infection <span class="sc">+</span> No_infection)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>effectiveness_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       Description Infection No_infection Total
+Treatment Prophylactic antibiotics         4          129   133
+Control                    Placebo        28          108   136</code></pre>
+</div>
+</div>
+</section>
+<section id="resource-use-and-cost-data" class="level2">
+<h2 class="anchored" data-anchor-id="resource-use-and-cost-data">Resource Use and Cost Data</h2>
+<p>The resource use and cost data comes from able 3.3, p55. Data is from <a href="https://pubmed.ncbi.nlm.nih.gov/2511938/">Mugford et al., 1989</a>, except for the cost of administering antibiotic which was estimated by Welton et al.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cost_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Parameter =</span> <span class="fu">c</span>( <span class="st">"Length of stay: infection"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Length of stay: no infection"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Cost per day: infection"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Cost per day: no infection"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Cost per dose: cephaslosporin"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Cost per administering antibiotic"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Doses administered"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Total number of Caesarians"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Number infections: no antibiotics"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>              ),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Estimate =</span> <span class="fu">c</span>(<span class="fl">8.80</span>, <span class="fl">6.70</span>, <span class="fl">163.03</span>, <span class="fl">107.26</span>, <span class="fl">5.67</span>, <span class="fl">7.00</span>, <span class="dv">3</span>, <span class="dv">486</span>, <span class="dv">41</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Units=</span><span class="fu">c</span>(<span class="st">"days"</span>, <span class="st">"days"</span>, <span class="st">"£"</span>, <span class="st">"£"</span>, <span class="st">"£"</span>, <span class="st">"£"</span>, <span class="st">"count"</span>, <span class="st">"count"</span>, <span class="st">"count"</span>),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable_name=</span><span class="fu">c</span>(<span class="st">"loswd"</span>, <span class="st">"losnwd"</span>, <span class="st">"cstwd"</span>, <span class="st">"cstnwd"</span>, <span class="st">"cstPx"</span>, <span class="st">"cstadmin"</span>, <span class="st">"dose"</span>, <span class="st">"nc1"</span>, <span class="st">"rc1"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>cost_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                          Parameter Estimate Units Variable_name
+1         Length of stay: infection     8.80  days         loswd
+2      Length of stay: no infection     6.70  days        losnwd
+3           Cost per day: infection   163.03     £         cstwd
+4        Cost per day: no infection   107.26     £        cstnwd
+5     Cost per dose: cephaslosporin     5.67     £         cstPx
+6 Cost per administering antibiotic     7.00     £      cstadmin
+7                Doses administered     3.00 count          dose
+8        Total number of Caesarians   486.00 count           nc1
+9 Number infections: no antibiotics    41.00 count           rc1</code></pre>
+</div>
+</div>
+<p>The following code builds a model in the <code>BUGS</code> language for specifying probability distributions that will be evaluated by the <code>rjags</code> interface to the <code>JAGS</code> MCMC engine.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">  cost_nwdpx &lt;- losnwd * cstnwd + dose * (cstPx + cstadmin) # Cost (No infection/Px)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">  cost_wdpx &lt;- loswd * cstwd + dose * (cstPx + cstadmin)    # Cost (Infection/Px)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">  cost_nwd &lt;- losnwd * cstnwd                               # Cost (No infection/no Px)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">  cost_wd &lt;- loswd * cstwd                                  # Cost (Infection/no Px)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">  RR &lt;- (a/(a+b))/(c/(c+d))                                 # Relative risk using </span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">                                                            # data from table 3.2</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">                                                            </span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">  p1 &lt;- rc1/nc1</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">  p2 &lt;- RR * p1</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">  costtrt &lt;- ((1-p2) * cost_nwdpx) + p2 * cost_wdpx         # Total cost (payoff) Px</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">  costctl &lt;- ((1-p1) * cost_nwd) + p1 * cost_wd             # Total cost (payoff) No Px</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>cost_data <span class="ot">&lt;-</span> <span class="fu">with</span>(cost_df, <span class="fu">setNames</span>(<span class="fu">as.list</span>(Estimate), <span class="at">nm=</span>Variable_name))</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>effectiveness_data <span class="ot">&lt;-</span>  <span class="fu">list</span>(</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">a=</span>effectiveness_df[<span class="st">'Treatment'</span>, <span class="st">'Infection'</span>],</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">b=</span>effectiveness_df[<span class="st">'Treatment'</span>, <span class="st">'No_infection'</span>],</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">c=</span>effectiveness_df[<span class="st">'Control'</span>, <span class="st">'Infection'</span>],</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">d=</span>effectiveness_df[<span class="st">'Control'</span>, <span class="st">'No_infection'</span>]</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>deterministic_data <span class="ot">&lt;-</span> <span class="fu">append</span>(cost_data, effectiveness_data)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># deterministic_data &lt;- list(</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   losnwd=6.7,</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   loswd=8.8,</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#   cstnwd=107.26,</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#   cstwd=163.03,</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#   cstPx=5.67,  # !!! `cstdrug` should be `cstPx`</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#   cstadmin=7,</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#   dose=3,</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   rc1=41,</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#   nc1=486, </span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   a=4,</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   b=129,</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#   c=28,</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#   d=108</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This code executes the model and displays the results. Notice that the expected costs of the treatment and control branches match those in the text on p56.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">jags</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> deterministic_data,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters.to.save =</span> <span class="fu">c</span>(<span class="st">"p1"</span>, <span class="st">"p2"</span>, <span class="st">"costtrt"</span>, <span class="st">"costctl"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model.file =</span> model_code <span class="sc">%&gt;%</span> textConnection,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.chains =</span> <span class="dv">1</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.iter=</span><span class="dv">1</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>JAGS output for model '5', generated by jagsUI.
+Estimates based on 1 chains of 1 iterations,
+adaptation = 100 iterations (sufficient),
+burn-in = 0 iterations and thin rate = 1,
+yielding 1 total samples from the joint posterior. 
+MCMC ran for 0.001 minutes at time 2025-04-08 08:22:37.722134.
+
+           mean sd    2.5%     50%   97.5% overlap0 f
+p1        0.084 NA   0.084   0.084   0.084    FALSE 1
+p2        0.012 NA   0.012   0.012   0.012    FALSE 1
+costtrt 765.476 NA 765.476 765.476 765.476    FALSE 1
+costctl 779.047 NA 779.047 779.047 779.047    FALSE 1
+
+overlap0 checks if 0 falls in the parameter's 95% credible interval.
+f is the proportion of the posterior with the same sign as the mean;
+i.e., our confidence that the parameter is positive or negative.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="stochastic-decision-analysis" class="level1">
+<h1>Stochastic Decision Analysis</h1>
+<p>Having established a deterministic baseline model, we now aim to account for the uncertainty in our modeling assumptions by developing a Bayesian stochastic model.</p>
+<p><img src="stochastic.png" class="img-fluid" alt="Stochastic Model DAG."></p>
+</section>
+<section id="model-with-distributions" class="level1">
+<h1>Model with Distributions</h1>
+<p>The next step towards working our way up to a full Bayesian model is to assign probability distributions to the clinical variables for which there is uncertainty. These are:</p>
+<section id="distribution-of-lnrelative-risk" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-lnrelative-risk">Distribution of ln(Relative Risk):</h2>
+<p><span class="math display">\[ ln(RR)\sim N(\theta, prec)\]</span> <span class="math display">\[ \theta = log\left(\frac{a/(a+b)}{c/(c+d)}\right) \]</span> <span class="math display">\[ prec = \frac{1}{(1/a) - 1 / (a + b)  + (1/c) - 1(/(c + d)} \\\]</span></p>
+<p>where:</p>
+<ul>
+<li>a is the number of women who received antibiotics and subsequently developed infections</li>
+<li>b is the number of women who received antibiotics who did not develop infections</li>
+<li>c is the number of women who received the placebo and subsequently became infected</li>
+<li>d is the number of women who received the placebo who did not become infected</li>
+</ul>
+</section>
+<section id="distribution-of-probinfection-no-antibiotic" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-probinfection-no-antibiotic">Distribution of Prob[infection | no antibiotic]</h2>
+<p><span class="math display">\[ p_1 \sim Beta( \alpha, \beta)\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\alpha = rc1\)</span></li>
+<li><span class="math inline">\(\beta = nc1 - rc1\)</span></li>
+<li>rc1 = Number infections: no antibiotics</li>
+<li>nc1 = Total number of Carnelians</li>
+</ul>
+<p><span class="math inline">\(p_2 = e^{lnRR} p_1\)</span></p>
+<p>is the distribution for the probability of an infection with the antibiotic.</p>
+<p><span class="math inline">\(loswd \sim N(mnloswd, precwd)\)</span></p>
+<p>is the distribution of the length of a hospital stay with infection where:</p>
+<p><span class="math inline">\(precwd = \frac{1}{(sdloswd/\sqrt{numwd})^2}\)</span></p>
+<p><span class="math inline">\(losnwd \sim N(mnlosnwd, precnwd)\)</span></p>
+<p>is the distribution for length of hospital stay without infection, where:</p>
+<p><span class="math inline">\(precnwd = \frac{1}{(sdlosnwd/\sqrt{numwd})^2}\)</span></p>
+<p><span class="math inline">\(cstadmin \sim U(4, 10)\)</span> is the distribution of the antibiotic dose administered.</p>
+<p><span class="math inline">\(cst.trt = (1-p_2)((cstPx + cstadmin)3 + (losnwd)(cstnwd)) + p_2((cstPx + cstadmin)3 + (loswd)(cstwd))\)</span></p>
+<p>is the total cost for the “payoff” of the antibiotic arm of the decision tree.</p>
+<p><span class="math inline">\(cst.ctl = (1-p_1)(losnwd)(cstnwd) + p_1(loswd)(cstwd)\)</span></p>
+<p>is the total cost for the payoff of the no antibiotic arm of the decision tree.</p>
+<p><span class="math inline">\(diff.cost = cst.trt - cst.ctl\)</span> is the differential cost.</p>
+</section>
+<section id="code-for-the-stochastic-model" class="level2">
+<h2 class="anchored" data-anchor-id="code-for-the-stochastic-model">Code for the Stochastic Model</h2>
+<p>This next block of <code>BUGS</code> code implements the stochastic model described above. The code is similar to the deterministic model, but with the addition of the distributions for the parameters that are uncertain. The code is not run here, but is used in the next section to run the model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>stochastic_model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">model{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">  lnRR ~ dnorm(theta, prec)   # Distribution for ln(Relative Risk)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">  theta &lt;- log( (a/(a+b)) / (c/(c+d)) )</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">  prec &lt;- 1/( (1/a) - (1/(a+b)) + (1/c) - (1/(c+d)) )</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="st">  p1 ~ dbeta(alpha, beta) # Distribution for Prob(Infection/NoPx)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="st">  alpha &lt;- rc1</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="st">  beta &lt;- nc1 - rc1</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="st">  p2 &lt;- exp(lnRR) * p1  # Distribution for Prob(Infection/Px)</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="st">  loswd ~ dnorm(mnloswd, precwd)  # Distribution for length of stay with infection</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="st">  precwd &lt;- 1/pow(sdloswd/sqrt(numwd), 2)</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="st">  losnwd ~ dnorm(mnlosnwd, precnwd)  # Distribution for length of stay w/o infection</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="st">  precnwd &lt;- 1/pow(sdlosnwd/sqrt(numnwd), 2)</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="st">  cstadmin ~ dunif(4, 10) # Px administration</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.trt &lt;- (1-p2)*((cstPx + cstadmin)*3 + (losnwd*cstnwd)) + p2*((cstPx + cstadmin)*3 + (loswd*cstwd)) # Total cost (payoff) Px</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.ctl &lt;- (1-p1)*(losnwd*cstnwd) + p1*(loswd*cstwd) # Total cost (payoff) No Rx</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.cost &lt;- cst.trt - cst.ctl  # Difference in cost</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span> <span class="sc">%&gt;%</span> <span class="fu">textConnection</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-for-the-stochastic-model" class="level2">
+<h2 class="anchored" data-anchor-id="data-for-the-stochastic-model">Data for the Stochastic Model</h2>
+<p>This block of R code provides parameter values for the stochastic model. The values are taken from the text, but some of them have been changed to reflect the fact that we are now using a stochastic model. The changes are indicated in the comments.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stochastic_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rc1=</span><span class="dv">41</span>, <span class="at">nc1=</span><span class="dv">486</span>, <span class="at">cstwd=</span><span class="fl">163.03</span>, <span class="at">cstnwd=</span><span class="fl">107.26</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mnloswd=</span><span class="fl">8.8</span>, <span class="at">sdloswd=</span><span class="fl">3.5</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mnlosnwd=</span><span class="fl">6.7</span>, <span class="at">sdlosnwd=</span><span class="fl">7.1</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">numwd=</span><span class="dv">41</span>, <span class="at">numnwd=</span><span class="dv">445</span>, <span class="co"># !!! numwd == rc1; numnwd == (nc1 - rc1)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cstPx=</span><span class="fl">5.67</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rt=4, nt=133, rc=28, nc=136,  # !!! Unused variables</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">a=</span><span class="dv">4</span>, <span class="at">b=</span><span class="dv">129</span>, <span class="at">c=</span><span class="dv">28</span>, <span class="at">d=</span><span class="dv">108</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Here I code the changes from the data for the deterministic model to the </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># data for the stochastic one, in case that makes the differences easier to see.</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add these:</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setdiff(names(stochastic_data), names(deterministic_data))</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># "mnloswd"  "sdloswd"  "mnlosnwd" "sdlosnwd"</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># "numwd" ==  rc1;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># "numnwd" == (nc1 - rc1)</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove or rename these:</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setdiff(names(deterministic_data), names(stochastic_data))</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  "loswd" -&gt; "mnloswd"</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  "losnwd" -&gt; "mnlosnwd"</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  "cstadmin" hard-coded uniform distribution</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  "dose": hard-coded !!!</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="co"># uncertainty &lt;- c(sdloswd=3.5, sdlosnwd=7.1) # standard deviations from Table 3.4</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co"># rename_me &lt;- c("loswd"="mnloswd", "losnwd"="mnlosnwd")</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="co"># stochastic_data &lt;- append(deterministic_data, uncertainty)</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="co"># for (old_name in names(rename_me)){</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="co">#   new_name &lt;- rename_me[[old_name]]</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="co">#   names(stochastic_data)[names(stochastic_data) == old_name] &lt;- new_name</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="co"># stochastic_data["cstadmin"] &lt;- NULL # now coded as uniform random</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="co"># stochastic_data["dose"] &lt;- NULL # the 3 is hard coded now</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="co"># stochastic_data["numwd"] &lt;- stochastic_data["rc1"]; </span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="co"># stochastic_data["numnwd"] &lt;-  with(stochastic_data, (nc1 - rc1))</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>parameters_to_save <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"cst.trt"</span>, <span class="st">"cst.ctl"</span>, <span class="st">"diff.cost"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="code-to-run-the-stochastic-model" class="level2">
+<h2 class="anchored" data-anchor-id="code-to-run-the-stochastic-model">Code to Run the Stochastic Model</h2>
+<p>This code runs the stochastic model. The code is similar to the deterministic model, but with the addition of the distributions for the parameters that are uncertain.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stochastic_results <span class="ot">&lt;-</span> <span class="fu">jags</span>( <span class="at">data =</span> stochastic_data,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">model.file =</span> stochastic_model_code,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.chains =</span> <span class="dv">4</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.adapt =</span> <span class="dv">100</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.iter =</span> <span class="dv">50000</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.burnin =</span> <span class="dv">20000</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="model-results" class="level2">
+<h2 class="anchored" data-anchor-id="model-results">Model Results</h2>
+<p>The following table shows model results. These include the mean, standard deviations, and quantiles for the posterior distributions of the cost of treatment and control, the differential cost and the relative risk, alonng with information on some diagnostic statistics. The results are similar to those in the text on p 66.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stochastic_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(stochastic_results) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(stochastic_results_summary,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>             mean     sd     50%     75%   97.5% Rhat  n.eff overlap0     f
+cst.trt   766.861 36.479 766.894 791.396 838.622    1 120000        0 1.000
+cst.ctl   779.139 35.122 779.226 802.802 847.892    1 120000        0 1.000
+diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</code></pre>
+</div>
+</div>
+<p>The diagnostic statistics are interpreted as follows:</p>
+<ul>
+<li>Rhat, the Gelman-Rubin Statistic, is a diagnostic that compares the variance within chains to the variance between chains. Values close to 1 (typically less than 1.1) indicate that the chains have converged.</li>
+<li>n.eff: provides an estimate of how many independent samples the samples in the chain are equivalent to. A higher number suggests more reliable estimates.</li>
+<li>overlap0 = 0 indicates that the 95% credible interval does not include 0, suggesting a statistically significant effect.</li>
+<li>f is the proportion of the posterior with the same sign as the mean.</li>
+</ul>
+</section>
+<section id="diagnostic-plots" class="level2">
+<h2 class="anchored" data-anchor-id="diagnostic-plots">Diagnostic Plots</h2>
+<p>In this section we will plot the results of the MCMC sampling. The first plot shows the trace plots for the three parameters of interest. The second plot shows the density plots for the same three parameters. Multiple colors on each of the trace plots indicates that the four independent MCMC chains are on top of each other and mixing well. We can see that the chains have converged to a common distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stochastic_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="prior-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="prior-distributions">Prior Distributions</h2>
+<p>In this section we plot the Prior distribution that were described above.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Prior Distribution for log Relative Risk</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>a</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>b</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>c</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>d</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">log</span>( (a<span class="sc">/</span>(a<span class="sc">+</span>b)) <span class="sc">/</span> (c<span class="sc">/</span>(c<span class="sc">+</span>d)) )</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#theta</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>prec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>( (<span class="dv">1</span><span class="sc">/</span>a) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>(a<span class="sc">+</span>b)) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">/</span>c) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>(c<span class="sc">+</span>d)) )</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#prec</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>var <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>prec</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#var</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sequence of x values</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the corresponding beta density values</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>lnRR <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, theta, prec)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for ggplot2</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>norm_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> lnRR)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the beta distribution</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>q1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(norm_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> lnRR)) <span class="sc">+</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"brown"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>( <span class="at">fill =</span> <span class="st">"brown"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prior: Log Relative Risk"</span>,</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Lpg(RR)"</span>,</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>)</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="do">### Prior Distribution for p1</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the beta distribution parameters</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>rc1</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>nc1 <span class="sc">-</span> stochastic_data<span class="sc">$</span>rc1</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sequence of x values</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, .<span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the corresponding beta density values</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(x, alpha, beta)</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for ggplot2</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>beta_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the beta distribution</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>q2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beta_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>( <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prior: Infection | no antibiotic"</span>,</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"p1"</span>,</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="do">### Prior distribution for length of stay, wound infection</span></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the normal distribution parameters</span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>mnloswd</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>sdlosnwd<span class="sc">/</span><span class="fu">sqrt</span>(stochastic_data<span class="sc">$</span>numwd)</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sequence of x values</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the corresponding beta density values</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, mean, sd)</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for ggplot2</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>norm_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the beta distribution</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>q3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(norm_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_area</span>( <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>   <span class="fu">xlim</span>(<span class="dv">5</span>,<span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prior: length of stay | infection"</span>,</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Length of Stay (days) "</span>,</span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>)</span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="do">## Prior distribution for length of stay, no wound infection</span></span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the normal distribution parameters</span></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>mnlosnwd</span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>sdlosnwd<span class="sc">/</span><span class="fu">sqrt</span>(stochastic_data<span class="sc">$</span>numnwd)</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sequence of x values</span></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the corresponding beta density values</span></span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, mean, sd)</span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for ggplot2</span></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>norm_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the beta distribution</span></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>q4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(norm_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_area</span>( <span class="at">fill =</span> <span class="st">"green"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>   <span class="fu">xlim</span>(<span class="dv">5</span>, <span class="dv">13</span>) <span class="sc">+</span> </span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prior: length of stay | no infection"</span>,</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Length of Stay (days)"</span>,</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>)</span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(q1, q3, q2, q4) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 20 rows containing non-finite outside the scale range
+(`stat_align()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 20 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="posterior-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="posterior-distributions">Posterior Distributions</h2>
+<p>Here we re-sample an existing model and plot densities of several variables using the R functions defined at the beginning of this document.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'cst.trt'</span>, <span class="st">'cst.ctl'</span>, <span class="st">'diff.cost'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>coda_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(stochastic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> my_vars, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  coda_sample_2_df <span class="sc">%&gt;%</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(1L) <span class="co"># randomly scramble chain order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Plot the posterior densities for the cost of treatment</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">&lt;-</span> <span class="fu">plot_densities_from_coda_df</span>(<span class="fu">c</span>(<span class="st">'cst.trt'</span>, <span class="st">'cst.ctl'</span>), coda_df) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Densities for Cost of Treatment"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>w1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Plot the posterior density for Differential Cost</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>w2 <span class="ot">&lt;-</span> coda_df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>diff.cost)) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Density for Differential Cost"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Plot the densities for P1 and P2</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>w3 <span class="ot">&lt;-</span> <span class="fu">plot_densities_from_coda_df</span>(<span class="fu">c</span>(<span class="st">'p1'</span>, <span class="st">'p2'</span>), coda_df) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Densities for P1 and P2"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>w3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="the-economic-evaluation-of-the-stochastic-model" class="level1">
+<h1>The Economic Evaluation of the Stochastic Model</h1>
+<p>Here we add the code from p65 to the model above.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>economic_model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st">model{</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">  lnRR ~ dnorm(theta, prec) # Distribution for ln(Relative Risk)</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">  theta &lt;- log( (a/(a+b)) / (c/(c+d)) )</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">  prec &lt;- 1/( (1/a) - (1/(a+b)) + (1/c) - (1/(c+d)) )</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">  p1 ~ dbeta(alpha, beta)  # Distribution for Prob(Infection/NoPx)</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">  alpha &lt;- rc1</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">  beta &lt;- nc1 - rc1</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="st">  p2 &lt;- exp(lnRR) * p1   # Distribution for Prob(Infection/Px)</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="st">  loswd ~ dnorm(mnloswd, precwd)   # Distribution for length of stay with infection</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="st">  precwd &lt;- 1/pow(sdloswd/sqrt(numwd), 2)</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="st">  losnwd ~ dnorm(mnlosnwd, precnwd) # Distribution for length of stay w/o infection</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="st">  precnwd &lt;- 1/pow(sdlosnwd/sqrt(numnwd), 2)</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="st">  cstadmin ~ dunif(4, 10)   # Px administration</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.trt &lt;- (1-p2)*((cstPx + cstadmin)*3 + (losnwd*cstnwd)) + p2*((cstPx + cstadmin)*3 + (loswd*cstwd)) # Total cost (payoff) Px</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.ctl &lt;- (1-p1)*(losnwd*cstnwd) + p1*(loswd*cstwd) # Total cost (payoff) No Rx</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.cost &lt;- cst.trt - cst.ctl   # Difference in cost</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="st">  # Economic evaluation code from pp 65-66</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="st">  totQALYs.wd &lt;- ((QALYwd/365)*loswd) + ((Fullhealth/365)*(fllwupdays-loswd)) # QALYs (infection)</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="st">  totQALYs.nwd &lt;- ((QALYnwd/365)*losnwd) + ((Fullhealth/365)*(fllwupdays-losnwd)) # QALYs (No infection)</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.trt &lt;- (1-p2) * totQALYs.nwd + p2 * totQALYs.wd  # QALYs (Px)</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.ctl &lt;- (1-p1) * totQALYs.nwd + p1 * totQALYs.wd  # QALYs (no px)</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.QALYs &lt;- (QALYs.trt - QALYs.ctl)                  # Difference in QALYs</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="st">  for (k in 1:M)</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="st">  {</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="st">    lambda[k] &lt;- (k-1) * 2000</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="st">    INB[k] &lt;- lambda[k] * diff.QALYs - diff.cost  # !!! not `delta.Qalys` or `delta.cost`</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="st">    ProbCE[k] &lt;- step(INB[k])</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="sc">%&gt;%</span> <span class="fu">textConnection</span>()</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="co"># economic_data &lt;- list(</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="co">#   rc1=41, nc1=486, cstwd=163.03, cstnwd=107.26,</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="co">#   mnloswd=8.8, sdloswd=3.5,</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a><span class="co">#   mnlosnwd=6.7, sdlosnwd=7.1,</span></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a><span class="co">#   numwd=41, numnwd=445,</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="co">#   cstPx=5.67,</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a><span class="co">#   a=4, b=129, c=28, d=108,</span></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a><span class="co">#   # additional data for economic evaluation</span></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a><span class="co">#   M=21, QALYwd=0.68, QALYnwd=0.88, Fullhealth=1, fllwupdays=20</span></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>economic_data <span class="ot">&lt;-</span> <span class="fu">append</span>(stochastic_data,</span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># additional data for economic evaluation</span></span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">M=</span><span class="dv">21</span>, <span class="at">QALYwd=</span><span class="fl">0.68</span>, <span class="at">QALYnwd=</span><span class="fl">0.88</span>, <span class="at">Fullhealth=</span><span class="dv">1</span>, <span class="at">fllwupdays=</span><span class="dv">20</span>)</span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>parameters_to_save <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="co">#"ProbCE", </span></span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cst.trt"</span>, <span class="st">"cst.ctl"</span>, <span class="st">"diff.cost"</span>, <span class="st">"p1"</span>, <span class="st">"p2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="run-the-economic-model" class="level2">
+<h2 class="anchored" data-anchor-id="run-the-economic-model">Run the Economic Model</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>economic_results <span class="ot">&lt;-</span> <span class="fu">jags</span>(<span class="at">data =</span> economic_data,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">model.file =</span> economic_model_code,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.chains =</span> <span class="dv">1</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.adapt =</span> <span class="dv">100</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.iter =</span> <span class="dv">50000</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.burnin =</span> <span class="dv">20000</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>And now, the economic results</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>economic_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(economic_results) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(economic_results_summary,<span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>             mean     sd     50%     75%   97.5% Rhat n.eff overlap0     f
+cst.trt   766.875 36.681 766.795 791.693 839.172   NA     1        0 1.000
+cst.ctl   779.184 35.302 778.983 803.017 848.766   NA     1        0 1.000
+diff.cost -12.309 12.812 -11.783  -3.497  11.143   NA     1        1 0.834
+p1          0.084  0.013   0.084   0.092   0.111   NA     1        0 1.000
+p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code></pre>
+</div>
+</div>
+</section>
+<section id="the-economic-decision" class="level2">
+<h2 class="anchored" data-anchor-id="the-economic-decision">The Economic Decision</h2>
+<section id="cost-effectiveness" class="level3">
+<h3 class="anchored" data-anchor-id="cost-effectiveness">Cost-Effectiveness</h3>
+<p>The following figure which plots the results of many simulations of the economic model on the cost-effectiveness plane is the major tool for faciliting the decision as to whether to adopt the practice of prophylactically administering antibiotics. The x-axis represents the incremental QALYs and the y-axis represents the incremental costs. The dashed lines represent different values for <span class="math inline">\(\lambda\)</span> the cut-off cost. The solid line represents the line of no difference in cost or QALYs.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 3.4: Cost-effectiveness plane (10000 simulations) for Caesarean section example.</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ce_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"diff.QALYs"</span>, <span class="st">"diff.cost"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>ce_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(economic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> ce_vars, </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> coda_sample_2_df</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>XLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">7e-4</span>)     <span class="co"># use same limits as chapter 3</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>YLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">75</span>, <span class="dv">50</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>LAMBDAS <span class="ot">=</span> <span class="dv">10000</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>CE_1 <span class="ot">&lt;-</span>ce_df <span class="sc">%&gt;%</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>diff.QALYs, <span class="at">y=</span>diff.cost, <span class="at">col=</span>chain)) <span class="sc">+</span> </span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="fl">0.5</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">0</span>, <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'solid'</span>) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span>LAMBDAS, <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>) <span class="sc">+</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Incremental QALYs"</span>, <span class="at">y =</span> <span class="st">"Incremental costs"</span>, <span class="at">title=</span><span class="st">"Cost-effectiveness plane for Caesarian section example"</span>) <span class="sc">+</span> </span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span>XLIM, <span class="at">ylim=</span>YLIM) <span class="sc">+</span> </span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> XLIM[<span class="dv">2</span>], <span class="at">y =</span> LAMBDAS <span class="sc">*</span> XLIM[<span class="dv">2</span>], </span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">3</span>, <span class="at">hjust=</span><span class="fl">0.8</span>, <span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"lambda =="</span>, LAMBDAS), <span class="at">parse=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>CE_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This next figure shows the expected incremental net benefit and 95% credible interval for a range of lambda values. The x-axis represents the value of lambda and the y-axis represents the expected incremental net benefit. The dashed lines represent the 2.5% and 97.5% quantiles of the posterior distribution of the incremental net benefit.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>inb_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"INB"</span>, <span class="st">"ProbCE"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>inb_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(economic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> inb_vars, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  coda_sample_2_df <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(chain) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">iteration=</span><span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  as.data.frame</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>inb_df_long <span class="ot">&lt;-</span> inb_df <span class="sc">%&gt;%</span> </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">42</span>,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="fu">c</span>(<span class="st">"metric"</span>, <span class="st">"k"</span>),</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_pattern=</span><span class="st">"(INB|ProbCE)</span><span class="sc">\\</span><span class="st">[(</span><span class="sc">\\</span><span class="st">d+)</span><span class="sc">\\</span><span class="st">]"</span>,</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to=</span><span class="st">"value"</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">k=</span><span class="fu">as.integer</span>(k), <span class="at">lambda=</span><span class="dv">2000</span><span class="sc">*</span>(k<span class="dv">-1</span>))</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>inb_df_long <span class="sc">%&gt;%</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(metric, lambda) <span class="sc">%&gt;%</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(metric<span class="sc">==</span><span class="st">"INB"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_INB=</span><span class="fu">mean</span>(value),</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">lo_end=</span><span class="fu">quantile</span>(value, <span class="at">probs=</span><span class="fl">0.025</span>),</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">hi_end=</span><span class="fu">quantile</span>(value, <span class="at">probs=</span><span class="fl">0.975</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>lambda, <span class="at">group=</span>metric)) <span class="sc">+</span> </span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>mean_INB)) <span class="sc">+</span> </span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>lo_end), <span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>hi_end), <span class="at">linetype=</span><span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="the-meta-analysis" class="level1">
+<h1>The Meta-Analysis</h1>
+<p>As we promised, having built up the structure of the decision model, we now show the meta-analysis model that drives the economic evaluation. The model is a Bayesian hierarchical model that uses the data from the thirty-five clinical trials to estimate the risk of infection with and without prophylactic antibiotics. The model is a random effects model that accounts for the heterogeneity between the trials.</p>
+<p>Note that we are presenting only the second second part of the a typical meta analysis. The fist part, a systematic search of the literature to decide what studies to include in the analysis which is not included here, would deserve its own workshop.</p>
+<p>The data for the Meta-analysis comes from a 2001 Cochrane Review article <a href="https://pubmed.ncbi.nlm.nih.gov/25350672/">Smaill &amp; Hofymer (2001)</a> that was subsequently withdrawn by the publisher because it was <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10798422/">out of date</a> replaced by <a href="https://pubmed.ncbi.nlm.nih.gov/25350672/">Smaill &amp; Grivell (2014)</a>. Nevertheless that data remains suitable for our purposes.</p>
+<p>The data comes from Table 7.1 of the text (page 142), shich summarizes the results of thirty-four clinical trials.The column headings are:</p>
+<ul>
+<li>rt: Pooled Odds ratio for treated arm</li>
+<li>rc: Pooled Odds ratio for control arm</li>
+<li>nt: number of subjects in treated arm</li>
+<li>nc: number of subjects in control arm</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>c_df <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"c_data.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(c_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"rt"</span>, <span class="st">"nt"</span>, <span class="st">"rc"</span>, <span class="st">"nc"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(c_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+     rt    nt    rc    nc
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     4   133    28   136
+2     2    68     1    56
+3     5    55     8    55
+4     3   100     0    33
+5     4   183     3    44
+6     0    46     4    55</code></pre>
+</div>
+</div>
+<p>Look at the data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> <span class="fu">c</span>(c_df<span class="sc">$</span>rt,c_df<span class="sc">$</span>rc)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"treat"</span>,<span class="fu">length</span>(c_df<span class="sc">$</span>rt)), <span class="fu">rep</span>(<span class="st">"control"</span>,<span class="fu">length</span>(c_df<span class="sc">$</span>rt)))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>long_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(OR,group)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histograms with kernel density estimates, faceted by group</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(long_df, <span class="fu">aes</span>(<span class="at">x =</span> OR, <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Histograms and Kernel Density Estimates (Faceted by Group)"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"OR"</span>,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"darkgreen"</span>)) <span class="sc">+</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> group, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<p>Here are the BUGS language models, both the meta-analysis model and the decision model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>model_code <span class="ot">&lt;-</span> <span class="st">"model</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="st">  # META-ANALYSIS ADJUSTING FOR BASELINE RISK</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="st">  for (i in 1:Num) </span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="st">  {</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="st">    rc[i] ~ dbin(pc[i], nc[i])</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="st">    rt[i] ~ dbin(pt[i], nt[i])  </span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="st">    logit(pc[i]) &lt;- mu[i]</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="st">    logit(pt[i]) &lt;- mu[i] + delta[i] </span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="st">    delta[i] &lt;- delta.star[i] + beta * (mu[i]-(-1.09))</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="st">    mu[i] ~ dnorm(0.0,1.0E-3)</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="st">    delta.star[i] ~ dnorm(d, prec)</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="st">  } </span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="st">  d ~ dnorm(0.0,1.0E-6)</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="st">  OR &lt;- exp(d)  </span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="st">  d.pred ~ dnorm(d,prec)</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="st">  beta ~ dnorm(0.0,1.0E-6)</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="st">  tau ~ dunif(0,10)</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="st">  tau.sq &lt;- tau*tau</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="st">  prec &lt;- 1/tau.sq</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="st">  # DEVIANCE CONTRIBUTION</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="st">  for (i in 1:Num) </span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a><span class="st">  {      </span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="st">    rthat[i] &lt;- pt[i] * nt[i] </span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a><span class="st">    dev[i] &lt;- 2 * (rt[i] * (log(rt[i])-log(rthat[i]))  +  (nt[i]-rt[i]) * (log(nt[i]-rt[i]) - log(nt[i]-rthat[i])))</span></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="st">  sumdev &lt;- sum(dev[])</span></span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="st">  # DATA FOR DECISION MODEL </span></span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="st">  # Probability of wound infection without antibiotics</span></span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a><span class="st">  rc1 ~ dbin(p1,nc1)</span></span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a><span class="st">  p1 ~ dbeta(1,1)</span></span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a><span class="st">  # Probability of wound infection with antibiotics</span></span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a><span class="st">  logit(p2) &lt;- logit(p1) + d + beta*(logit(p1)-(-1.09))</span></span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a><span class="st">  # Length of stay in hospital with wound infection</span></span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a><span class="st">  loswd ~ dnorm(mnloswd,precwd)  </span></span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a><span class="st">  precwd &lt;- 1/pow(sdloswd/sqrt(numwd),2)</span></span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a><span class="st">  # Length of stay in hospital without wound infection  </span></span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a><span class="st">  losnwd ~ dnorm(mnlosnwd,precnwd)  </span></span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a><span class="st">  precnwd &lt;- 1/pow(sdlosnwd/sqrt(numnwd),2) </span></span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a><span class="st">  # Antibiotics administration costs    </span></span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a><span class="st">  drugadmin ~ dunif(4,10)</span></span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a><span class="st">  # QALYs - wound infection</span></span>
+<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.wd &lt;- ((QALYwd/365)*loswd)+((Fullhealth/365)*(fllwupdays-loswd))</span></span>
+<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a><span class="st">  # QALYs - no wound infection</span></span>
+<span id="cb33-62"><a href="#cb33-62" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.nwd &lt;- ((QALYnwd/365)*losnwd)+((Fullhealth/365)*(fllwupdays-losnwd))</span></span>
+<span id="cb33-63"><a href="#cb33-63" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-64"><a href="#cb33-64" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-65"><a href="#cb33-65" aria-hidden="true" tabindex="-1"></a><span class="st">  # DECISION MODEL  </span></span>
+<span id="cb33-66"><a href="#cb33-66" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-67"><a href="#cb33-67" aria-hidden="true" tabindex="-1"></a><span class="st">  # Cost with prophylactic antibiotics                                  </span></span>
+<span id="cb33-68"><a href="#cb33-68" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.trt &lt;- (1-p2) * ((antibiotic+drugadmin) * 3 + (losnwd*inptnwd)) + p2 * ((antibiotic+drugadmin) * 3 + (loswd * inptwd))</span></span>
+<span id="cb33-69"><a href="#cb33-69" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-70"><a href="#cb33-70" aria-hidden="true" tabindex="-1"></a><span class="st">  # Cost without prophylactic antibiotics</span></span>
+<span id="cb33-71"><a href="#cb33-71" aria-hidden="true" tabindex="-1"></a><span class="st">  cst.ctl &lt;- (1-p1) * (losnwd*inptnwd) + p1 * (loswd*inptwd)</span></span>
+<span id="cb33-72"><a href="#cb33-72" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-73"><a href="#cb33-73" aria-hidden="true" tabindex="-1"></a><span class="st">  # Difference in cost      </span></span>
+<span id="cb33-74"><a href="#cb33-74" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.cost &lt;- cst.trt - cst.ctl</span></span>
+<span id="cb33-75"><a href="#cb33-75" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-76"><a href="#cb33-76" aria-hidden="true" tabindex="-1"></a><span class="st">  # Number of wound infections avoided using prophylactic antibiotics</span></span>
+<span id="cb33-77"><a href="#cb33-77" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.wd &lt;- (nc1 * (p1 - p2))</span></span>
+<span id="cb33-78"><a href="#cb33-78" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-79"><a href="#cb33-79" aria-hidden="true" tabindex="-1"></a><span class="st">  # QALYs - with prophylactic antibiotics   </span></span>
+<span id="cb33-80"><a href="#cb33-80" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.trt &lt;- (1-p2) * QALYs.nwd+p2 * QALYs.wd</span></span>
+<span id="cb33-81"><a href="#cb33-81" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-82"><a href="#cb33-82" aria-hidden="true" tabindex="-1"></a><span class="st">  # QALYs - without prophylactic antibiotics    </span></span>
+<span id="cb33-83"><a href="#cb33-83" aria-hidden="true" tabindex="-1"></a><span class="st">  QALYs.ctl &lt;- (1-p1) * QALYs.nwd+p1 * QALYs.wd</span></span>
+<span id="cb33-84"><a href="#cb33-84" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-85"><a href="#cb33-85" aria-hidden="true" tabindex="-1"></a><span class="st">  # Difference in QALYs </span></span>
+<span id="cb33-86"><a href="#cb33-86" aria-hidden="true" tabindex="-1"></a><span class="st">  diff.QALYs &lt;- (QALYs.trt - QALYs.ctl)</span></span>
+<span id="cb33-87"><a href="#cb33-87" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-88"><a href="#cb33-88" aria-hidden="true" tabindex="-1"></a><span class="st">  # Probability using prophylactic antibiotics costs less than not using prophylactic antibiotics</span></span>
+<span id="cb33-89"><a href="#cb33-89" aria-hidden="true" tabindex="-1"></a><span class="st">  Q &lt;- step(cst.ctl - cst.trt)</span></span>
+<span id="cb33-90"><a href="#cb33-90" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-91"><a href="#cb33-91" aria-hidden="true" tabindex="-1"></a><span class="st">  # Cost effectiveness ratio</span></span>
+<span id="cb33-92"><a href="#cb33-92" aria-hidden="true" tabindex="-1"></a><span class="st">  ce.ratio &lt;- diff.cost/diff.wd </span></span>
+<span id="cb33-93"><a href="#cb33-93" aria-hidden="true" tabindex="-1"></a><span class="st">  cu.ratio &lt;- diff.cost/diff.QALYs          </span></span>
+<span id="cb33-94"><a href="#cb33-94" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb33-95"><a href="#cb33-95" aria-hidden="true" tabindex="-1"></a><span class="st">  # INCREMENTAL NET BENEFIT</span></span>
+<span id="cb33-96"><a href="#cb33-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-97"><a href="#cb33-97" aria-hidden="true" tabindex="-1"></a><span class="st">  for (k in 1:M) </span></span>
+<span id="cb33-98"><a href="#cb33-98" aria-hidden="true" tabindex="-1"></a><span class="st">  {</span></span>
+<span id="cb33-99"><a href="#cb33-99" aria-hidden="true" tabindex="-1"></a><span class="st">    Rc1[k] &lt;- (k-1) * 2000</span></span>
+<span id="cb33-100"><a href="#cb33-100" aria-hidden="true" tabindex="-1"></a><span class="st">    INB.QALYs[k] &lt;- Rc1[k] * diff.QALYs - diff.cost     </span></span>
+<span id="cb33-101"><a href="#cb33-101" aria-hidden="true" tabindex="-1"></a><span class="st">    ProbCU[k] &lt;- step(INB.QALYs[k])</span></span>
+<span id="cb33-102"><a href="#cb33-102" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb33-103"><a href="#cb33-103" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb33-104"><a href="#cb33-104" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="sc">%&gt;%</span> textConnection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>In this ploc we specify the parameters for the decision model and re-enter the meta-analysis model in a form required by <code>JAGS</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Num=</span><span class="dv">35</span>, <span class="co"># number of studies</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rc1=</span><span class="dv">41</span>, <span class="co"># number of infections in control group</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">nc1=</span><span class="dv">486</span>, <span class="co"># number of patients in control group</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">inptwd=</span><span class="fl">163.03</span>, <span class="co"># cost of inpatient care with infection</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">inptnwd=</span><span class="fl">107.26</span>, <span class="co"># cost of inpatient care without infection</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mnloswd=</span><span class="fl">8.8</span>, <span class="co"># mean length of stay with infection</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdloswd=</span><span class="fl">3.5</span>, <span class="co"># standard deviation of length of stay with infection</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mnlosnwd=</span><span class="fl">6.7</span>,  <span class="co"># mean length of stay without infection</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdlosnwd=</span><span class="fl">7.1</span>, <span class="co"># standard deviation of length of stay without infection</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">numwd=</span><span class="dv">41</span>, <span class="co"># number of patients with infection</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">numnwd=</span><span class="dv">445</span>, <span class="co"># number of patients without infection</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">antibiotic=</span><span class="fl">5.67</span>, <span class="co"># cost of antibiotic</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">M=</span><span class="dv">21</span>, <span class="co"># number of lambda values</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">QALYwd=</span><span class="fl">0.68</span>, <span class="co"># QALY with infection</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">QALYnwd=</span><span class="fl">0.88</span>, <span class="co"># QALY without infection</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Fullhealth=</span><span class="dv">1</span>, <span class="co"># QALY for full health</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">fllwupdays=</span><span class="dv">20</span>, <span class="co"># follow-up days</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rt =</span> c_df<span class="sc">$</span>rt, <span class="co"># pooled odds ratio for treated arm</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">nt =</span> c_df<span class="sc">$</span>nt, <span class="co"># number of subjects in treated arm</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">rc =</span> c_df<span class="sc">$</span>rc, <span class="co"># pooled odds ratio for control arm</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">nc =</span> c_df<span class="sc">$</span>nc <span class="co"># number of subjects in control arm</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>In this section we initialize the Markov Chains. # Starting/initial values</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>initial_values <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tau=</span><span class="dv">1</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta.star=</span> <span class="fu">rep</span>(<span class="dv">0</span>,data<span class="sc">$</span>Num),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">d=</span><span class="dv">0</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu=</span>c <span class="sc">-</span> <span class="fu">rep</span>(<span class="dv">0</span>,data<span class="sc">$</span>Num),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p1=</span><span class="fl">1e-6</span>, <span class="co"># 1e-6 works, 0.0 does not</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta=</span><span class="fl">1e-6</span>  <span class="co"># 1e-6 works, 0.0 does not</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">tau=</span><span class="fl">0.1</span>,</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta.star=</span><span class="fu">rep</span>(<span class="dv">1</span>,data<span class="sc">$</span>Num),</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">d=</span><span class="dv">1</span>, </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">1</span>,data<span class="sc">$</span>Num), </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">p1=</span><span class="fl">0.5</span>, </span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta=</span><span class="dv">1</span>)</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>parameters_to_save <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ProbCU"</span>, <span class="st">"INB.QALYs"</span>, <span class="st">"Rc1"</span>, <span class="st">"diff.QALYs"</span>,<span class="st">"diff.cost"</span>,<span class="st">"OR"</span>,</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"beta"</span>,<span class="st">"ce.ratio"</span>,<span class="st">"cu.ratio"</span>,<span class="st">"p1"</span>,<span class="st">"p2"</span>,</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"sumdev"</span>,<span class="st">"tau.sq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Here, we run the model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mad_results <span class="ot">&lt;-</span> <span class="fu">jags</span>(<span class="at">data =</span> data,</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">inits =</span> initial_values,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">model.file =</span> model_code,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.chains =</span> <span class="fu">length</span>(initial_values),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.adapt =</span> <span class="dv">100</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.iter =</span> <span class="dv">50000</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.burnin =</span> <span class="dv">20000</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">n.thin =</span> <span class="dv">2</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="results-from-the-meta-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="results-from-the-meta-analysis">Results from the Meta-Analysis</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>mad_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mad_results) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>mad_results_short <span class="ot">&lt;-</span> mad_results_summary <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">11</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">22</span>,<span class="dv">43</span>, <span class="dv">64</span><span class="sc">:</span><span class="dv">74</span>)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>mad_results_short</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  mean       sd       50%    75%    97.5% Rhat n.eff overlap0
+ProbCU[1]         0.75     0.44      1.00   1.00     1.00 1.00 30000        1
+INB.QALYs[1]      8.69    12.58      7.99  16.67    35.38 1.00 30000        1
+Rc1[1]            0.00     0.00      0.00   0.00     0.00   NA     1        1
+diff.QALYs        0.00     0.00      0.00   0.00     0.00 1.00     1        0
+diff.cost        -8.69    12.58     -7.99   0.17    13.95 1.00 30000        1
+OR                0.06     0.01      0.06   0.07     0.09 1.01   277        0
+beta             -1.01     0.05     -1.01  -0.99    -0.91 1.00   324        0
+ce.ratio         -0.22     0.38     -0.25   0.01     0.63 1.00 30000        1
+cu.ratio     -18067.97 33383.42 -22611.89 565.32 59984.31 1.00 30000        1
+p1                0.09     0.01      0.09   0.09     0.11 1.00 30000        0
+p2                0.02     0.00      0.02   0.02     0.03 1.01   445        0
+sumdev           43.72     7.01     44.62  49.16    55.09 1.01   264        0
+tau.sq            0.21     0.23      0.14   0.31     0.82 1.01 21106        0
+deviance        257.52    11.49    257.38 265.11   280.69 1.00 30000        0</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mad_results, <span class="at">parameters=</span><span class="fu">c</span>(<span class="st">"diff.QALYs"</span>,<span class="st">"diff.cost"</span>,<span class="st">"OR"</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"ce.ratio"</span>,<span class="st">"cu.ratio"</span>,<span class="st">"p1"</span>,<span class="st">"p2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="correlation-scatterplot-ce-plane-diff.qalys-vs-diff.cost" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-scatterplot-ce-plane-diff.qalys-vs-diff.cost">Correlation Scatterplot (CE plane): diff.QALYs vs diff.cost</h2>
+<p>Here we re-sample the model to monitor cost-effectiveness parameters.</p>
+<p>For an example using coda.samples, see the course notes from <a href="https://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html">Bayesian Analysis in JAGS: EMD chapter 6</a>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ce_coda_sample <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(mad_results<span class="sc">$</span>model, <span class="at">variable.names =</span> <span class="fu">c</span>(<span class="st">"diff.QALYs"</span>, <span class="st">"diff.cost"</span>), </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># one set of results per chain?</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># coda_sample[[1]] %&gt;% as.matrix %&gt;% as.data.frame %&gt;% </span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   ggplot(aes(x=diff.QALYs, y=diff.cost)) + geom_point()</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>coda_sample_2_df <span class="ot">&lt;-</span> <span class="cf">function</span>(my_coda_sample){</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">seq_along</span>(my_coda_sample) <span class="sc">%&gt;%</span> <span class="fu">lapply</span>(<span class="cf">function</span>(chain){</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> my_coda_sample[[chain]] <span class="sc">%&gt;%</span> as.matrix <span class="sc">%&gt;%</span> as.data.frame</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'chain'</span>] <span class="ot">&lt;-</span> chain</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    bind_rows <span class="sc">%&gt;%</span> </span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">chain=</span><span class="fu">factor</span>(chain))</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>ce_df <span class="ot">&lt;-</span> ce_coda_sample <span class="sc">%&gt;%</span> </span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  coda_sample_2_df <span class="sc">%&gt;%</span> </span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(1L) <span class="co"># randomly scramble chain order</span></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>XLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">7e-4</span>)     <span class="co"># use same limits as chapter 3</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>YLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">75</span>, <span class="dv">50</span>)</span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>LAMBDAS <span class="ot">=</span> <span class="dv">10000</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>CE_2 <span class="ot">&lt;-</span> ce_df <span class="sc">%&gt;%</span></span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(chain <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span>  <span class="co"># to compare to Ch3, which had only one chain</span></span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>diff.QALYs, <span class="at">y=</span>diff.cost, <span class="at">col=</span>chain)) <span class="sc">+</span> </span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="fl">0.5</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">0</span>, <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'solid'</span>) <span class="sc">+</span></span>
+<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span>LAMBDAS, <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>) <span class="sc">+</span></span>
+<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb40-34"><a href="#cb40-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Incremental QALYs"</span>, <span class="at">y =</span> <span class="st">"Incremental costs"</span>, <span class="at">title=</span><span class="st">"Cost-effectiveness plane for Caesarian section example with meta-analysis"</span>) <span class="sc">+</span> </span>
+<span id="cb40-35"><a href="#cb40-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span>XLIM, <span class="at">ylim=</span>YLIM) <span class="sc">+</span> </span>
+<span id="cb40-36"><a href="#cb40-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> XLIM[<span class="dv">2</span>], <span class="at">y =</span> LAMBDAS <span class="sc">*</span> XLIM[<span class="dv">2</span>], </span>
+<span id="cb40-37"><a href="#cb40-37" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">3</span>, <span class="at">hjust=</span><span class="fl">0.8</span>, <span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb40-38"><a href="#cb40-38" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"lambda =="</span>, LAMBDAS), <span class="at">parse=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-39"><a href="#cb40-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-40"><a href="#cb40-40" aria-hidden="true" tabindex="-1"></a>CE_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="closing-remarks" class="level1">
+<h1>Closing Remarks</h1>
+<p>We have presented a classic decision analysis problem informed by a Bayesian statistical analysis and a decision structure that includes economic analysis and utility measured QALYs. The decision is from the point of view of a public health system that concerned with providing the best outcome for a population given their budgetary constraints. However, the framework and the methodology can easily be reframed for decisions to be made by other organizations and individuals.</p>
+<p>Bayesian analysis is the best choice for this kind of decision for a number of reasons, but two advantages stand out:</p>
+<ul>
+<li>Well crafted, informative priors enable information to be included from many sources. Not only does the meta-analysis we showed incorporate the results from multiple clinical trials, but priors allow for the integration of expert opinion and other, non numeric information.</li>
+<li>The Bayesian method of modeling parameters with probability distributions and the integration of the clinical effectiveness and economic considerations allow the uncertainty due to assumptions and modeling decisions to propagate throughout the model. This is clearly superior to the traditional static method of producing point estimates for effectiveness data and then altering these after the fact to attempt to produce a convincing sensitivity analysis.</li>
+</ul>
+<p>We have also introduced the basics of Markov Chain Monte Carlo techniques which allow the numerical approximation complex probability distributions that would otherwise be intractable.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
