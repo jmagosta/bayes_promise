@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+<link rel="stylesheet" href="file:////Users/jma/.vscode/extensions/goessner.mdmath-2.7.4/themes/default/style.css">
+
+</head>
+<body class="markdown-body">
+<h1 dir="auto" id="r-setup-in-vs-code">R setup in VS Code</h1>
+<p dir="auto">VS Code is customizable for software development in multiple languages. Here's a note about how to start using it for the R language.</p>
+<h2 dir="auto" id="0-use-your-current-r-install">0) Use your current R install</h2>
+<p dir="auto">Assume you have a current working R version in the terminal, and</p>
+<p dir="auto"><code>&gt; .libPaths()</code></p>
+<p dir="auto">returns a valid path:</p>
+<p dir="auto"><code>[1] &quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library&quot;</code></p>
+<p dir="auto">On the Mac, VS Code finds the R executable and library paths automatically. You can check this by opening a shell (e.g. zsh, or bash) in VS Code and invoking <code>R</code>.</p>
+<h2 dir="auto" id="1-integration-requires-these-installs">1) Integration requires these installs:</h2>
+<ul dir="auto">
+<li dir="auto">First, in <code>R</code> add the <a href="https://github.com/microsoft/vscode-languageserver-node">languageserver</a> package</li>
+</ul>
+<p dir="auto"><code>&gt; install.packages(&quot;languageserver&quot;)</code></p>
+<p dir="auto">This package exposes an API for common text editors,  not specific to VS Code</p>
+<ul dir="auto">
+<li dir="auto">Then install the <a href="https://github.com/REditorSupport/vscode-R"><em>R Extension for Visual Studio Code</em></a> Extension. (Don't confuse it with &quot;R Tools&quot; or other of the several R related extensions available). It needs to be enabled:</li>
+</ul>
+<p dir="auto"><img src="./RextensionforVSCode.png" alt="Rextension" data-src="./RextensionforVSCode.png"></p>
+<p dir="auto">Configuring the Extension is done by the dropdown on the &quot;gear&quot; icon. However the default settings typically work fine.</p>
+<p dir="auto"><img src="./settings.png" alt="settings" data-src="./settings.png"></p>
+<p dir="auto">Now when you do a &quot;new file&quot; you'll have choice of both an <code>.R</code> file and <code>.rmd</code> file option. R files include &quot;intellisense&quot; popup suggestions for command completion in addition to other smart editor features. For now try the <code>.R</code> file feature; <code>.rmd</code> files need additional extensions enabled.  The R Extension also adds an &quot;R terminal&quot; to the list of choices in the lower right terminal dropdown:</p>
+<p dir="auto"><img src="terminal_dropdown.png" alt="R Terminal dropdown" data-src="terminal_dropdown.png"></p>
+<p dir="auto"><em>but you don't need to create an active R terminal to execute R code</em>, as shown here:</p>
+<h2 dir="auto" id="3-running-r-files">3) Running .R files</h2>
+<ul dir="auto">
+<li dir="auto">
+<p dir="auto">The R Extension enables <code>cmd-return</code> (Mac) to send the current line or file selection to the R process running in the current terminal window, or creates a process to run it if none exists. Of course you can interact directly with the R process at the prompt in the window. This does not require you to load the languageserver library in the R process.</p>
+</li>
+<li dir="auto">
+<p dir="auto">An alternate command is the <code>Run code</code> (cntrl-option-n) in the file's right-click context menu, to run the current file via <code>Rscript.</code> Be sure to save the file first.</p>
+</li>
+</ul>
+<p dir="auto">Since there can be several active R processes, the current process PID is shown on the right in the Status bar. Either method to run code will create a graphics pane if necessary, which can be saved as a png file.</p>
+<p dir="auto">Other actions are analogous to those familiar in RStudio, but the interface is adapted to VS Code:</p>
+<p dir="auto">In the far left sidebar, the <img src="./r_icon.png" alt="R icon" data-src="./r_icon.png"> icon brings up the &quot;Workspace&quot; with a browsable list of global R objects like the Rstudio Environment, and a menu of help page widgets. Similarly a file's right-click context menu &quot;Open help for selection&quot; will bring up the documentation file for an R object.</p>
+<h2 dir="auto" id="4-and-beyond">4) And beyond</h2>
+<p dir="auto">So you see that editor support provided by the <em>R Extension for VS Code</em> covers most basic features of a useful R GUI. Other features, such as running R markup notebooks, symbolic debugging, or connecting to a browser require loading other VS Code extensions.</p>
+
+</body>
+</html>

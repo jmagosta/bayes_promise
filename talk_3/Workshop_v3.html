@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Robert Horton Joseph Rickert">
+<meta name="author" content="Robert Horton &amp; Joseph Rickert">
 <meta name="dcterms.date" content="2025-04-07">
 
 <title>DA Workshop</title>
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -65,13 +65,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Workshop_v3_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="Workshop_v3_files/libs/quarto-html/anchor.min.js"></script>
 <link href="Workshop_v3_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Workshop_v3_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="Workshop_v3_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Workshop_v3_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Workshop_v3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Workshop_v3_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="Workshop_v3_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -134,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul>
 </nav>
 </div>
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -150,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Robert Horton Joseph Rickert </p>
+             <p>Robert Horton &amp; Joseph Rickert </p>
           </div>
   </div>
     
@@ -165,7 +192,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <section id="health-technology-assessment" class="level1">
 <h1>Health Technology Assessment</h1>
@@ -233,9 +262,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="setup-r-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="setup-r-libraries">Setup R Libraries</h2>
+<p><em>Note, you need to install the command line version of <code>JAGS</code> for <code>rjags</code> to function. For MacOS <a href="https://letmegooglethat.com/?q=Does+RJAGS+run+on+the+Mac%3F">see</a>.</em></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rjags, <span class="at">verbose =</span> <span class="cn">FALSE</span>)      <span class="co"># coda.samples</span></span>
@@ -247,8 +277,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This code implements a Gibbs Sampler construct to a Bivariate Normal distribution.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.60</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trials <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sdev <span class="ot">&lt;-</span> <span class="fu">sqrt</span>( <span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>)</span>
@@ -263,7 +293,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Simulated Bivariate Normal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -293,8 +327,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="the-clinical-data">The Clinical Data</h2>
 <p>The data for our first model comes from a study by <a href="https://pubmed.ncbi.nlm.nih.gov/8051377/">Bibi et al., 1994</a> to test the effectiveness of prophylacticly using antibiotics to reduce infection in women delivering by cesarean section/</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>effectiveness_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">Description =</span> <span class="fu">c</span>(<span class="st">"Prophylactic antibiotics"</span>, <span class="st">"Placebo"</span>),</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Infection =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">28</span>),</span>
@@ -315,8 +349,8 @@ Control                    Placebo        28          108   136</code></pre>
 <h2 class="anchored" data-anchor-id="resource-use-and-cost-data">Resource Use and Cost Data</h2>
 <p>The resource use and cost data comes from able 3.3, p55. Data is from <a href="https://pubmed.ncbi.nlm.nih.gov/2511938/">Mugford et al., 1989</a>, except for the cost of administering antibiotic which was estimated by Welton et al.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cost_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Parameter =</span> <span class="fu">c</span>( <span class="st">"Length of stay: infection"</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Length of stay: no infection"</span>,</span>
@@ -350,8 +384,8 @@ Control                    Placebo        28          108   136</code></pre>
 </div>
 <p>The following code builds a model in the <code>BUGS</code> language for specifying probability distributions that will be evaluated by the <code>rjags</code> interface to the <code>JAGS</code> MCMC engine.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">  cost_nwdpx &lt;- losnwd * cstnwd + dose * (cstPx + cstadmin) # Cost (No infection/Px)</span></span>
@@ -398,8 +432,8 @@ Control                    Placebo        28          108   136</code></pre>
 </div>
 <p>This code executes the model and displays the results. Notice that the expected costs of the treatment and control branches match those in the text on p56.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">jags</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> deterministic_data,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters.to.save =</span> <span class="fu">c</span>(<span class="st">"p1"</span>, <span class="st">"p2"</span>, <span class="st">"costtrt"</span>, <span class="st">"costctl"</span>),</span>
@@ -411,8 +445,8 @@ Control                    Placebo        28          108   136</code></pre>
 </details>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -421,7 +455,7 @@ Estimates based on 1 chains of 1 iterations,
 adaptation = 100 iterations (sufficient),
 burn-in = 0 iterations and thin rate = 1,
 yielding 1 total samples from the joint posterior. 
-MCMC ran for 0.001 minutes at time 2025-04-08 08:22:37.722134.
+MCMC ran for 0 minutes at time 2025-04-11 10:38:43.92125.
 
            mean sd    2.5%     50%   97.5% overlap0 f
 p1        0.084 NA   0.084   0.084   0.084    FALSE 1
@@ -484,8 +518,8 @@ i.e., our confidence that the parameter is positive or negative.</code></pre>
 <h2 class="anchored" data-anchor-id="code-for-the-stochastic-model">Code for the Stochastic Model</h2>
 <p>This next block of <code>BUGS</code> code implements the stochastic model described above. The code is similar to the deterministic model, but with the addition of the distributions for the parameters that are uncertain. The code is not run here, but is used in the next section to run the model.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>stochastic_model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">model{</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">  lnRR ~ dnorm(theta, prec)   # Distribution for ln(Relative Risk)</span></span>
@@ -519,8 +553,8 @@ i.e., our confidence that the parameter is positive or negative.</code></pre>
 <h2 class="anchored" data-anchor-id="data-for-the-stochastic-model">Data for the Stochastic Model</h2>
 <p>This block of R code provides parameter values for the stochastic model. The values are taken from the text, but some of them have been changed to reflect the fact that we are now using a stochastic model. The changes are indicated in the comments.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stochastic_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rc1=</span><span class="dv">41</span>, <span class="at">nc1=</span><span class="dv">486</span>, <span class="at">cstwd=</span><span class="fl">163.03</span>, <span class="at">cstnwd=</span><span class="fl">107.26</span>,</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mnloswd=</span><span class="fl">8.8</span>, <span class="at">sdloswd=</span><span class="fl">3.5</span>,</span>
@@ -570,8 +604,8 @@ i.e., our confidence that the parameter is positive or negative.</code></pre>
 <h2 class="anchored" data-anchor-id="code-to-run-the-stochastic-model">Code to Run the Stochastic Model</h2>
 <p>This code runs the stochastic model. The code is similar to the deterministic model, but with the addition of the distributions for the parameters that are uncertain.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stochastic_results <span class="ot">&lt;-</span> <span class="fu">jags</span>( <span class="at">data =</span> stochastic_data,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">model.file =</span> stochastic_model_code,</span>
@@ -587,17 +621,17 @@ i.e., our confidence that the parameter is positive or negative.</code></pre>
 <h2 class="anchored" data-anchor-id="model-results">Model Results</h2>
 <p>The following table shows model results. These include the mean, standard deviations, and quantiles for the posterior distributions of the cost of treatment and control, the differential cost and the relative risk, alonng with information on some diagnostic statistics. The results are similar to those in the text on p 66.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stochastic_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(stochastic_results) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(stochastic_results_summary,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>             mean     sd     50%     75%   97.5% Rhat  n.eff overlap0     f
-cst.trt   766.861 36.479 766.894 791.396 838.622    1 120000        0 1.000
-cst.ctl   779.139 35.122 779.226 802.802 847.892    1 120000        0 1.000
-diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</code></pre>
+cst.trt   766.681 36.476 766.563 791.263 838.193    1  36521        0 1.000
+cst.ctl   778.941 35.104 778.956 802.537 847.586    1  39963        0 1.000
+diff.cost -12.260 12.778 -11.759  -3.489  11.325    1 120000        1 0.834</code></pre>
 </div>
 </div>
 <p>The diagnostic statistics are interpreted as follows:</p>
@@ -612,12 +646,16 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 <h2 class="anchored" data-anchor-id="diagnostic-plots">Diagnostic Plots</h2>
 <p>In this section we will plot the results of the MCMC sampling. The first plot shows the trace plots for the three parameters of interest. The second plot shows the density plots for the same three parameters. Multiple colors on each of the trace plots indicates that the four independent MCMC chains are on top of each other and mixing well. We can see that the chains have converged to a common distribution.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stochastic_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -625,8 +663,8 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 <h2 class="anchored" data-anchor-id="prior-distributions">Prior Distributions</h2>
 <p>In this section we plot the Prior distribution that were described above.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Prior Distribution for log Relative Risk</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>a</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> stochastic_data<span class="sc">$</span>b</span>
@@ -737,7 +775,11 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 (`geom_line()`).</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -745,46 +787,58 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 <h2 class="anchored" data-anchor-id="posterior-distributions">Posterior Distributions</h2>
 <p>Here we re-sample an existing model and plot densities of several variables using the R functions defined at the beginning of this document.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'cst.trt'</span>, <span class="st">'cst.ctl'</span>, <span class="st">'diff.cost'</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>coda_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(stochastic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> my_vars, </span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  coda_sample_2_df <span class="sc">%&gt;%</span> </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(1L) <span class="co"># randomly scramble chain order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(<span class="dv">1</span>L) <span class="co"># randomly scramble chain order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Plot the posterior densities for the cost of treatment</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">&lt;-</span> <span class="fu">plot_densities_from_coda_df</span>(<span class="fu">c</span>(<span class="st">'cst.trt'</span>, <span class="st">'cst.ctl'</span>), coda_df) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Densities for Cost of Treatment"</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>w1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Plot the posterior density for Differential Cost</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>w2 <span class="ot">&lt;-</span> coda_df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>diff.cost)) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Density for Differential Cost"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Plot the densities for P1 and P2</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>w3 <span class="ot">&lt;-</span> <span class="fu">plot_densities_from_coda_df</span>(<span class="fu">c</span>(<span class="st">'p1'</span>, <span class="st">'p2'</span>), coda_df) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Posterior Densities for P1 and P2"</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>w3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -793,8 +847,8 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 <h1>The Economic Evaluation of the Stochastic Model</h1>
 <p>Here we add the code from p65 to the model above.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>economic_model_code <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st">model{</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">  lnRR ~ dnorm(theta, prec) # Distribution for ln(Relative Risk)</span></span>
@@ -863,8 +917,8 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 <section id="run-the-economic-model" class="level2">
 <h2 class="anchored" data-anchor-id="run-the-economic-model">Run the Economic Model</h2>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>economic_results <span class="ot">&lt;-</span> <span class="fu">jags</span>(<span class="at">data =</span> economic_data,</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">model.file =</span> economic_model_code,</span>
@@ -877,19 +931,19 @@ diff.cost -12.278 12.817 -11.793  -3.446  11.263    1 120000        1 0.833</cod
 </div>
 <p>And now, the economic results</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>economic_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(economic_results) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(economic_results_summary,<span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>             mean     sd     50%     75%   97.5% Rhat n.eff overlap0     f
-cst.trt   766.875 36.681 766.795 791.693 839.172   NA     1        0 1.000
-cst.ctl   779.184 35.302 778.983 803.017 848.766   NA     1        0 1.000
-diff.cost -12.309 12.812 -11.783  -3.497  11.143   NA     1        1 0.834
-p1          0.084  0.013   0.084   0.092   0.111   NA     1        0 1.000
-p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code></pre>
+cst.trt   766.943 36.439 766.716 791.427 838.283   NA     1        0 1.000
+cst.ctl   779.232 35.063 778.972 802.816 847.831   NA     1        0 1.000
+diff.cost -12.289 12.768 -11.786  -3.555  11.218   NA     1        1 0.835
+p1          0.084  0.013   0.084   0.093   0.111   NA     1        0 1.000
+p2          0.014  0.008   0.012   0.018   0.035   NA     1        0 1.000</code></pre>
 </div>
 </div>
 </section>
@@ -899,8 +953,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <h3 class="anchored" data-anchor-id="cost-effectiveness">Cost-Effectiveness</h3>
 <p>The following figure which plots the results of many simulations of the economic model on the cost-effectiveness plane is the major tool for faciliting the decision as to whether to adopt the practice of prophylactically administering antibiotics. The x-axis represents the incremental QALYs and the y-axis represents the incremental costs. The dashed lines represent different values for <span class="math inline">\(\lambda\)</span> the cut-off cost. The solid line represents the line of no difference in cost or QALYs.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 3.4: Cost-effectiveness plane (10000 simulations) for Caesarean section example.</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ce_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"diff.QALYs"</span>, <span class="st">"diff.cost"</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>ce_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(economic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> ce_vars, </span>
@@ -923,13 +977,17 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>CE_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This next figure shows the expected incremental net benefit and 95% credible interval for a range of lambda values. The x-axis represents the value of lambda and the y-axis represents the expected incremental net benefit. The dashed lines represent the 2.5% and 97.5% quantiles of the posterior distribution of the incremental net benefit.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>inb_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"INB"</span>, <span class="st">"ProbCE"</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>inb_df <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(economic_results<span class="sc">$</span>model, <span class="at">variable.names =</span> inb_vars, </span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> </span>
@@ -962,7 +1020,11 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>hi_end), <span class="at">linetype=</span><span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -971,9 +1033,9 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <section id="the-meta-analysis" class="level1">
 <h1>The Meta-Analysis</h1>
 <p>As we promised, having built up the structure of the decision model, we now show the meta-analysis model that drives the economic evaluation. The model is a Bayesian hierarchical model that uses the data from the thirty-five clinical trials to estimate the risk of infection with and without prophylactic antibiotics. The model is a random effects model that accounts for the heterogeneity between the trials.</p>
-<p>Note that we are presenting only the second second part of the a typical meta analysis. The fist part, a systematic search of the literature to decide what studies to include in the analysis which is not included here, would deserve its own workshop.</p>
+<p>Note that we are presenting only the second part of the a typical meta analysis. The fist part, a systematic search of the literature to decide what studies to include in the analysis that is not included here, would deserve its own workshop.</p>
 <p>The data for the Meta-analysis comes from a 2001 Cochrane Review article <a href="https://pubmed.ncbi.nlm.nih.gov/25350672/">Smaill &amp; Hofymer (2001)</a> that was subsequently withdrawn by the publisher because it was <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10798422/">out of date</a> replaced by <a href="https://pubmed.ncbi.nlm.nih.gov/25350672/">Smaill &amp; Grivell (2014)</a>. Nevertheless that data remains suitable for our purposes.</p>
-<p>The data comes from Table 7.1 of the text (page 142), shich summarizes the results of thirty-four clinical trials.The column headings are:</p>
+<p>The data comes from Table 7.1 of the text (page 142), which summarizes the results of thirty-four clinical trials. The column headings are:</p>
 <ul>
 <li>rt: Pooled Odds ratio for treated arm</li>
 <li>rc: Pooled Odds ratio for control arm</li>
@@ -981,8 +1043,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <li>nc: number of subjects in control arm</li>
 </ul>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>c_df <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"c_data.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(c_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"rt"</span>, <span class="st">"nt"</span>, <span class="st">"rc"</span>, <span class="st">"nc"</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(c_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1001,8 +1063,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 </div>
 <p>Look at the data</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> <span class="fu">c</span>(c_df<span class="sc">$</span>rt,c_df<span class="sc">$</span>rc)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"treat"</span>,<span class="fu">length</span>(c_df<span class="sc">$</span>rt)), <span class="fu">rep</span>(<span class="st">"control"</span>,<span class="fu">length</span>(c_df<span class="sc">$</span>rt)))</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>long_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(OR,group)</span>
@@ -1021,15 +1083,19 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> group, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <section id="model" class="level2">
 <h2 class="anchored" data-anchor-id="model">Model</h2>
 <p>Here are the BUGS language models, both the meta-analysis model and the decision model.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>model_code <span class="ot">&lt;-</span> <span class="st">"model</span></span>
@@ -1138,8 +1204,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 </div>
 <p>In this ploc we specify the parameters for the decision model and re-enter the meta-analysis model in a form required by <code>JAGS</code>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -1169,8 +1235,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 </div>
 <p>In this section we initialize the Markov Chains. # Starting/initial values</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>initial_values <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tau=</span><span class="dv">1</span>,</span>
@@ -1197,8 +1263,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 </div>
 <p>Here, we run the model.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mad_results <span class="ot">&lt;-</span> <span class="fu">jags</span>(<span class="at">data =</span> data,</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">inits =</span> initial_values,</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">parameters.to.save =</span> parameters_to_save,</span>
@@ -1215,8 +1281,8 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <section id="results-from-the-meta-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="results-from-the-meta-analysis">Results from the Meta-Analysis</h2>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>mad_results_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mad_results) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>mad_results_short <span class="ot">&lt;-</span> mad_results_summary <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">11</span>)) <span class="sc">|&gt;</span></span>
@@ -1224,34 +1290,42 @@ p2          0.014  0.008   0.012   0.017   0.035   NA     1        0 1.000</code
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>mad_results_short</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  mean       sd       50%    75%    97.5% Rhat n.eff overlap0
-ProbCU[1]         0.75     0.44      1.00   1.00     1.00 1.00 30000        1
-INB.QALYs[1]      8.69    12.58      7.99  16.67    35.38 1.00 30000        1
-Rc1[1]            0.00     0.00      0.00   0.00     0.00   NA     1        1
-diff.QALYs        0.00     0.00      0.00   0.00     0.00 1.00     1        0
-diff.cost        -8.69    12.58     -7.99   0.17    13.95 1.00 30000        1
-OR                0.06     0.01      0.06   0.07     0.09 1.01   277        0
-beta             -1.01     0.05     -1.01  -0.99    -0.91 1.00   324        0
-ce.ratio         -0.22     0.38     -0.25   0.01     0.63 1.00 30000        1
-cu.ratio     -18067.97 33383.42 -22611.89 565.32 59984.31 1.00 30000        1
-p1                0.09     0.01      0.09   0.09     0.11 1.00 30000        0
-p2                0.02     0.00      0.02   0.02     0.03 1.01   445        0
-sumdev           43.72     7.01     44.62  49.16    55.09 1.01   264        0
-tau.sq            0.21     0.23      0.14   0.31     0.82 1.01 21106        0
-deviance        257.52    11.49    257.38 265.11   280.69 1.00 30000        0</code></pre>
+<pre><code>                  mean       sd       50%     75%    97.5% Rhat n.eff overlap0
+ProbCU[1]         0.74     0.44      1.00    1.00     1.00 1.00  5325        1
+INB.QALYs[1]      8.27    12.41      7.64   16.23    34.48 1.00  3118        1
+Rc1[1]            0.00     0.00      0.00    0.00     0.00   NA     1        1
+diff.QALYs        0.00     0.00      0.00    0.00     0.00 1.00     1        0
+diff.cost        -8.27    12.41     -7.64    0.44    14.05 1.00  3118        1
+OR                0.07     0.01      0.06    0.07     0.09 1.10    41        0
+beta             -0.99     0.05     -1.00   -0.99    -0.85 1.30    49        0
+ce.ratio         -0.21     0.38     -0.24    0.02     0.62 1.00  3227        1
+cu.ratio     -17102.14 33500.00 -21746.95 1426.52 60523.20 1.00  3339        1
+p1                0.09     0.01      0.09    0.09     0.11 1.00 30000        0
+p2                0.02     0.00      0.02    0.02     0.03 1.02    90        0
+sumdev           45.72     6.27     47.14   50.18    55.38 1.01   879        0
+tau.sq            0.13     0.16      0.07    0.20     0.58 1.04    81        0
+deviance        259.25    10.99    259.01  266.30   281.69 1.00   595        0</code></pre>
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mad_results, <span class="at">parameters=</span><span class="fu">c</span>(<span class="st">"diff.QALYs"</span>,<span class="st">"diff.cost"</span>,<span class="st">"OR"</span>,</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"ce.ratio"</span>,<span class="st">"cu.ratio"</span>,<span class="st">"p1"</span>,<span class="st">"p2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1260,8 +1334,8 @@ deviance        257.52    11.49    257.38 265.11   280.69 1.00 30000        0</c
 <p>Here we re-sample the model to monitor cost-effectiveness parameters.</p>
 <p>For an example using coda.samples, see the course notes from <a href="https://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html">Bayesian Analysis in JAGS: EMD chapter 6</a>.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
+<details class="code-fold">
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ce_coda_sample <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(mad_results<span class="sc">$</span>model, <span class="at">variable.names =</span> <span class="fu">c</span>(<span class="st">"diff.QALYs"</span>, <span class="st">"diff.cost"</span>), </span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1283,7 +1357,7 @@ deviance        257.52    11.49    257.38 265.11   280.69 1.00 30000        0</c
 <span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>ce_df <span class="ot">&lt;-</span> ce_coda_sample <span class="sc">%&gt;%</span> </span>
 <span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  coda_sample_2_df <span class="sc">%&gt;%</span> </span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(1L) <span class="co"># randomly scramble chain order</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(<span class="dv">1</span>L) <span class="co"># randomly scramble chain order</span></span>
 <span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>XLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">7e-4</span>)     <span class="co"># use same limits as chapter 3</span></span>
 <span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>YLIM <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">75</span>, <span class="dv">50</span>)</span>
@@ -1304,7 +1378,11 @@ deviance        257.52    11.49    257.38 265.11   280.69 1.00 30000        0</c
 <span id="cb40-40"><a href="#cb40-40" aria-hidden="true" tabindex="-1"></a>CE_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Workshop_v3_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1357,18 +1435,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1400,11 +1467,48 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1414,8 +1518,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1427,7 +1540,129 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1471,6 +1706,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1496,6 +1732,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1556,6 +1818,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

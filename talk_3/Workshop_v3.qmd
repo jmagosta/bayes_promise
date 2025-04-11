@@ -1,6 +1,6 @@
 ---
 title: "DA Workshop"
-author: "Robert Horton Joseph Rickert"
+author: "Robert Horton & Joseph Rickert"
 date: 2025-04-07
 description: ""
 image: ""
@@ -92,6 +92,8 @@ The following example comes from [Dobrow (2016)](https://www.wiley.com/en-us/Int
 5.  Return to step 2
 
 ## Setup R Libraries
+
+*Note, you need to install the command line version of `JAGS` for `rjags` to function. For MacOS [see](https://letmegooglethat.com/?q=Does+RJAGS+run+on+the+Mac%3F).*
 
 ```{r}
 #| warning: FALSE
@@ -791,11 +793,11 @@ inb_df_long %>%
 
 As we promised, having built up the structure of the decision model, we now show the meta-analysis model that drives the economic evaluation. The model is a Bayesian hierarchical model that uses the data from the thirty-five clinical trials to estimate the risk of infection with and without prophylactic antibiotics. The model is a random effects model that accounts for the heterogeneity between the trials.
 
-Note that we are presenting only the second second part of the a typical meta analysis. The fist part, a systematic search of the literature to decide what studies to include in the analysis which is not included here, would deserve its own workshop.
+Note that we are presenting only the second part of the a typical meta analysis. The fist part, a systematic search of the literature to decide what studies to include in the analysis that is not included here, would deserve its own workshop.
 
 The data for the Meta-analysis comes from a 2001 Cochrane Review article [Smaill & Hofymer (2001)](https://pubmed.ncbi.nlm.nih.gov/25350672/) that was subsequently withdrawn by the publisher because it was [out of date](https://pmc.ncbi.nlm.nih.gov/articles/PMC10798422/) replaced by [Smaill & Grivell (2014)](https://pubmed.ncbi.nlm.nih.gov/25350672/). Nevertheless that data remains suitable for our purposes.
 
-The data comes from Table 7.1 of the text (page 142), shich summarizes the results of thirty-four clinical trials.The column headings are:
+The data comes from Table 7.1 of the text (page 142), which summarizes the results of thirty-four clinical trials. The column headings are:
 
 -   rt: Pooled Odds ratio for treated arm
 -   rc: Pooled Odds ratio for control arm

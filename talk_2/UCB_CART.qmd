@@ -1,0 +1,142 @@
+---
+title: "Used car buyer simulation CART"
+author: "John Mark Agosta"
+format: html
+editor: visual
+code-fold: true
+code-summary: "Show the code"
+---
+
+# Generating a classification tree
+
+This notebook runs the `rpart` machine learning classification algorithm on the simulated data created by the `Classification_splits.ipynb` notebook. The output of the classification algorithm is saved to a file which is read in by this notebook. 
+
+There are two versions of the model here, the first one just using the simulated data, the second one applying a `param` argument to adjust the data prevalence to equal the prior for the `y` state variable. 
+
+
+#### Required Libraries
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+library(rpart)
+library(dplyr)
+library(rpart.plot)
+library(ggplot2)
+```
+
+### Loading the data
+
+We load the simulated data, that will be passed to `rpart`, the `R` language version of CART, to generate a classification tree. Common parlance is to call this a *decision tree*, which creates confusion with the term decision tree as used in Decision Analysis; hence our use of the term classification tree. 
+
+The data contains the 3 observable continuous variables, and the class label, `y`.
+
+```{r}
+setwd('/Users/jma/repos/bayes_promise/talk_2')
+p_df <- readr::read_csv(file = "simulated_states.csv", show_col_types = FALSE) 
+spec(p_df)
+```
+
+### Extract leaf counts from the tree
+
+The output of `rpart` is extensive. We will need just the fraction of the `y` values that appear in each leaf node. This function extracts those fractions to form the conditional probability table (CPT) for the influence diagram. 
+
+```{r}
+build.cpt <- function(c_tree, i1= 4, i2=10) {
+    # I1, i2 are the columns containing the connectives '<" and '>="
+    rules <- rpart.rules(c_tree)
+    # TODO verify this node name assignment
+    rules[["node"]] <- row.names(rules) # row.names(tree_df)[unique(classification_tree$where)]
+    # Find the correspondence of rules to the frame rownames
+    # NOte the difference from the previous cell. 
+    # See https://www.r-bloggers.com/2022/10/understanding-leaf-node-numbers-when-using-rpart-and-rpart-rules/
+    print(rules)
+    # Use the rules features to create a cpt for P( y | features )
+    # order the features. 
+    # features <- obs
+   
+    # For now assume one leaf node per CPT element, and binary y and features. 
+    # Find all features used in splits. 
+    obs <- unique(c(rules[[i1-1 ]] , rules[[i2-1]])) # relevant_features
+    cat( obs[1], obs[[2]], '\n')
+    ar_names = list(c("TRUE", "FALSE"),c("TRUE", "FALSE"),c("TRUE", "FALSE"))# list(rep(c("TRUE", "FALSE"), 1+length(relevant_features)))
+    CPT = array(NA, dim=c(2,2,2), dimnames=ar_names)
+    # mappings from rule labels to matrix entries
+    m = list(">=" = "TRUE", "< "="FALSE")
+    for (irow in 1:nrow(rules)) {
+        v1 <- rules[[irow, i1]]
+        v2 <- rules[[irow, i2]]
+        cat(v1,v2, '\n')   # check the connectives
+        # cat(as.numeric(rules[["node"]][irow]), m[[v1]],m[[v2]], '\n')
+        p <- as.numeric(rules[[irow, "y"]])
+        # cat( m[[v1]], '\n', m[[v2]], '\n' )
+        CPT[  "TRUE", m[[v1]], m[[v2]]] <- p 
+        CPT["FALSE", m[[v1]], m[[v2]]] <- 1 - p
+    }
+    ar_names <- list(c("TRUE", "FALSE"),
+        c(obs[1], paste0("not_",obs[1])),
+        c(obs[2], paste0("not_",obs[2])))
+
+    dimnames(CPT) <- ar_names
+    CPT
+}
+```
+
+### Classification Tree output
+
+Running `rpart` on the full dataset.  `cp` is the *complexity parameter*, used to limit the extent of the tree to just two levels. 
+
+```{r}
+classification_tree <- rpart(y ~ ., data = p_df, method="class", cp = 0.2)
+print(summary(classification_tree))
+```
+
+### Show the tree
+
+One the data is run through two levels of splits, first for 'ignition' and then for 'carb', the leaf nodes are almost perfect predictors for the class. `rpart` determines the best thresholds at which to create splits, discretizing the features for use in the CPT. It does the parameter estimation necessary to create the CPT from the continuous features, including excluding features, eg. `door` that are irrelevant to prediction. 
+
+```{r}
+rpart.plot(classification_tree)
+```
+
+### Tree leaf nodes
+
+We'll use the leaf nodes to derive the CPT predictive probabilities for the influence diagram model.
+
+```{r}
+# print(paste("Leaf: ", unique(classification_tree$where)))
+
+leaf_nodes <- classification_tree$frame %>% filter( var == '<leaf>')
+leaf_nodes
+
+```
+
+### Classification tree rules
+
+View the rules that generate the leaf nodes. 
+
+```{r}
+rpart.plot::rpart.rules(classification_tree)
+```
+
+### Create the CPT
+
+```{r}
+build.cpt(classification_tree, i2=8)
+```
+
+## Adjust the prior and re-run the tree
+
+Since the class prevalence---the fraction of `y` values does not match the prior probability, we need to adjust the classification tree based on the prior.  `rpart` has this ability by re-weighting the data used to determine the node splits. It lets one specify a prior via the `param` argument.  Alternatively the same computation can be done by adjusting the joint probability for features and class variables, that can be recovered from the classification tree structure.  The ability to estimate the full joint from the tree construction is characteristic of the Bayesian nature of the algorithm.
+
+```{r}
+p_lemon <- 0.2
+c_w_prior_tree <- rpart(y ~ ., data = p_df, method="class", parms = list(prior = c(p_lemon, 
+    1 - p_lemon)), cp = 0.2)
+rpart.plot(c_w_prior_tree)
+```
+
+### View the CPT with the prior adjustment from the leaf node outputs. 
+
+```{r}
+build.cpt(c_w_prior_tree, i2=8)
+```
