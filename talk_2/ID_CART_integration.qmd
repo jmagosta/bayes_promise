@@ -1,0 +1,276 @@
+---
+title: "Integrating Influence Diagrams with an ML Classifier"
+author: "John Mark Agosta"
+date: "2025-04-13"
+format: html
+python: jupyter
+echo: false
+description: "A rewrite of the notebooks Classification_splits and joint_prob, including UCB_CART"
+---
+
+# Notebook for the talk *Integrating Decision Analysis and Data Science, The Bayesian Promise*
+
+We present the code to demonstrate of how machine learning classification trees can be applied in a principled way to Decision Analysis. Extending a well-known textbook example called "The Used Car Buyer", we go through the steps to build an influence diagram decision model, then learn its probability model from a data set, and finally integrate the two models, including showing how it is possible to tune the predictions to the priors taken from the decision model.
+
+> TODO: Background on the Used Car Buyer paper
+
+```{r}
+#| echo: true
+# wake up reticulate
+ls()
+```
+
+# Simulating the used car fault data
+
+The tests in the influence diagram are derived from this simulate data.
+
+#### python libraries
+
+```{python}
+#| echo: true
+
+# Import array, tensor, and dataframe packages
+import numpy as np
+import pandas as pd
+import torch
+
+# Statistics
+import statsmodels.api as sm
+from sklearn.metrics import confusion_matrix
+from scipy.cluster.vq import whiten  # For covariance matrix
+
+# plots
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+```
+
+## Simulate some continuous data
+
+```{python}
+obs_labels = ('ig_fault', 'carb_fault', 'door_fault')
+# The means could be the priors on the splits
+ig_mean = 1.0
+carb_mean = door_mean = 2.0
+ig_sd = carb_sd = door_sd = 0.25
+
+ # Create some random partitions
+CNTS = 1000
+
+## Bernoulli success rates for the observations.    P( y | obs )
+p_ig = 0.4
+p_carb = 0.75
+
+# prob of the exclusive or of the two faults  = p(or) - p(and)
+f'Prevalence of "Peach":  {p_ig + p_carb - 2 * (p_ig * p_carb):.3f}'
+```
+
+#### Simulate the probability of the state: car being a "Peach"
+
+```{python }
+#| echo: true
+# Two logical variables, to create different combinations of x1, x2
+a_partition = torch.bernoulli(p_ig * torch.ones((1,CNTS)))
+b_partition = torch.bernoulli(p_carb * torch.ones((1,CNTS)))
+ys = torch.vstack((a_partition,  b_partition))
+y = ys.sum(axis=0)
+
+# Reduce the ys array ofbinary 0, 1s, to an exclusive or. 
+y_or =y.clone().apply_(lambda z: 1 if z> 0 else 0 )
+y_xor = torch.add(ys[0,:], ys[1,:])  - 2 * torch.mul(ys[0,:], ys[1,:])
+print(y_xor[:20])
+```
+
+#### Create noisy versions of each observable
+
+The two observables, "ignition" and "carburetor" are noisy Gaussian random variables conditioned on the car state.
+
+```{python}
+def noisy_partition(partition, m, s, spread=1):
+    return torch.normal(m * (spread + partition), s)
+
+x1 = noisy_partition(ys[0,:],ig_mean, ig_sd)
+x2 = noisy_partition(ys[1,:],carb_mean, carb_sd)
+
+p_df = pd.DataFrame({"y": y_xor, obs_labels[0]:x1, obs_labels[1]:x2})
+p_var = p_df.columns
+```
+
+#### Create a noisy, independent observable
+
+The "door" test is a Gaussian that is irrelevant to the car state
+
+```{python}
+#| echo: TRUE
+#| output: TRUE
+# Add an irrelevant continuous variable
+x3 = noisy_partition(torch.ones(CNTS),door_mean, door_sd)
+p_df = p_df.assign(**{obs_labels[2]: x3})
+p_df.head()
+```
+
+#### View the fault & observables correlation matrix
+
+Two features, ig_fault and carb_fault are weakly correlated to the outcome, and door_fault is not correlated at all.
+
+```{python}
+# Build the covariance matrix of the whitened df
+p_cov = torch.cov(torch.tensor(whiten(p_df.values).T))
+p_var = p_var.append(pd.Index([obs_labels[2]]))
+pd.options.display.float_format = '{:.3f}'.format
+print(pd.DataFrame(p_cov, index=p_var, columns=p_var))
+```
+
+#### Pair-wise plots of the variables, with their histograms
+
+```{python}
+sns.pairplot(p_df, diag_kind='hist', hue = 'y')
+```
+
+### Accuracy of a linear predictor, for purposes of comparison
+
+```{python}
+X = p_df[list(obs_labels)]
+y = p_df[['y']]
+X = X.assign(c=pd.DataFrame(np.ones(len(y))))
+model = sm.OLS(y,X)
+model_predictions = model.fit().predict()
+
+# Visualize the confusion matrix 
+confusion = confusion_matrix(y_true = y_xor, y_pred=(model_predictions > 0.5))
+cm_df = pd.DataFrame(confusion, index=['Actual 0', 'Actual 1'], columns=['Predicted 0', 'Predicted 1'])
+accuracy = (confusion[0,0] + confusion[1,1])/confusion.sum()
+print('accuracy = ', accuracy)
+sns.heatmap(cm_df, annot=True, fmt = 'd')
+```
+
+Just in case, save the simulated data
+
+```{python}
+# Save the model training data
+p_df['y'] = p_df['y'].astype('bool')
+p_df.to_csv('/Users/jma/Documents/BayesFusion/simulated_states.csv', header=True, index=None)
+```
+
+## (In R) Generating a classification tree
+
+This section runs the `rpart` machine learning classification algorithm on the simulated data created by the `Classification_splits.ipynb` notebook. The output of the classification algorithm is saved to a file which is read in by this notebook.
+
+There are two versions of the model here, the first one just using the simulated data, the second one applying a `param` argument to adjust the data prevalence to equal the prior for the `y` state variable.
+
+```{r}
+library(readr)
+library(rpart)
+library(dplyr)
+library(rpart.plot)
+library(ggplot2)
+```
+
+Grab the simulated data
+
+```{r}
+library(reticulate)
+p_df <- py$p_df
+p_df
+```
+
+### Function to extract leaf counts from the tree
+
+```{r}
+#| echo: false
+build.cpt <- function(c_tree, i1= 4, i2=10) {
+    # I1, i2 are the columns containing the connectives '<" and '>="
+    rules <- rpart.rules(c_tree)
+    # TODO verify this node name assignment
+    rules[["node"]] <- row.names(rules) # row.names(tree_df)[unique(classification_tree$where)]
+    # Find the correspondence of rules to the frame rownames
+    # NOte the difference from the previous cell. 
+    # See https://www.r-bloggers.com/2022/10/understanding-leaf-node-numbers-when-using-rpart-and-rpart-rules/
+    print(rules)
+    # Use the rules features to create a cpt for P( y | features )
+    # order the features. 
+    # features <- obs
+   
+    # For now assume one leaf node per CPT element, and binary y and features. 
+    # Find all features used in splits. 
+    obs <- unique(c(rules[[i1-1 ]] , rules[[i2-1]])) # relevant_features
+    cat( obs[1], obs[[2]], '\n')
+    ar_names = list(c("TRUE", "FALSE"),c("TRUE", "FALSE"),c("TRUE", "FALSE"))# list(rep(c("TRUE", "FALSE"), 1+length(relevant_features)))
+    CPT = array(NA, dim=c(2,2,2), dimnames=ar_names)
+    # mappings from rule labels to matrix entries
+    m = list(">=" = "TRUE", "< "="FALSE")
+    for (irow in 1:nrow(rules)) {
+        v1 <- rules[[irow, i1]]
+        v2 <- rules[[irow, i2]]
+        cat(v1,v2, '\n')   # check the connectives
+        # cat(as.numeric(rules[["node"]][irow]), m[[v1]],m[[v2]], '\n')
+        p <- as.numeric(rules[[irow, "y"]])
+        # cat( m[[v1]], '\n', m[[v2]], '\n' )
+        CPT[  "TRUE", m[[v1]], m[[v2]]] <- p 
+        CPT["FALSE", m[[v1]], m[[v2]]] <- 1 - p
+    }
+    ar_names <- list(c("TRUE", "FALSE"),
+        c(obs[1], paste0("not_",obs[1])),
+        c(obs[2], paste0("not_",obs[2])))
+
+    dimnames(CPT) <- ar_names
+    CPT
+}
+```
+
+### Run `RPART` and show its output
+
+```{r}
+#| echo: true
+#| output: true
+classification_tree <- rpart(y ~ ., data = p_df, method="class", cp = 0.2)
+print(summary(classification_tree))
+```
+
+#### Show the classification tree
+
+One the data is run through two levels of splits, first for 'ignition' and then for 'carb', the leaf nodes are almost perfect predictors for the class. `rpart` determines the best thresholds at which to create splits, discretizing the features for use in the CPT. It does the parameter estimation necessary to create the CPT from the continuous features, including excluding features, eg. `door` that are irrelevant to prediction.
+
+```{r}
+rpart.plot(classification_tree)
+```
+
+#### Extract the tree leaf nodes
+
+```{r}
+leaf_nodes <- classification_tree$frame %>% filter( var == '<leaf>')
+leaf_nodes
+```
+
+### View classification tree rules
+
+```{r}
+rpart.plot::rpart.rules(classification_tree)
+
+```
+
+#### Create the CPT
+
+The fraction of "peach" in each leaf node become the posterior probabilities of the elements in the state variable conditional probability table.
+
+```{r}
+build.cpt(classification_tree, i2=8)
+```
+
+## Re-run the tree with an adjustment to the prior
+
+Since the class prevalence---the fraction of `y` values does not match the prior probability, we need to adjust the classification tree based on the prior. `rpart` has this ability by re-weighting the data used to determine the node splits. It lets one specify a prior via the `param` argument. Alternatively the same computation can be done by adjusting the joint probability for features and class variables, that can be recovered from the classification tree structure. The ability to estimate the full joint from the tree construction is characteristic of the Bayesian nature of the algorithm.
+
+```{r}
+p_lemon <- 0.2
+c_w_prior_tree <- rpart(y ~ ., data = p_df, method="class", parms = list(prior = c(p_lemon, 
+    1 - p_lemon)), cp = 0.2)
+rpart.plot(c_w_prior_tree)
+
+```
+
+### View the CPT  from the leaf node with the prior adjustment.
+
+```{r}
+build.cpt(c_w_prior_tree, i2=8)
+```
